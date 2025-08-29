@@ -157,3 +157,5 @@ yarn-error.log*
 /Builds/iOS/
 /Builds/Android/
 /Builds/WebGL/
+/Assets/TestModels
+/Assets/TestModels.meta
