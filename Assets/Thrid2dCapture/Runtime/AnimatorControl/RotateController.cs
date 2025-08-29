@@ -5,6 +5,9 @@ namespace com.knight.thrid2dcapture
     public class RotateController
     {
         public const int Divid = 16;
+
+        public int CurrentIndex => _currentRotateIndex;
+
         private GameObject ControlGameObject;
         private int _currentRotateIndex;
 

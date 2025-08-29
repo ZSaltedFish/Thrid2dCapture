@@ -8,6 +8,7 @@ namespace com.knight.thrid2dcapture
     public class PlayableController : IDisposable
     {
         public AnimationClip Clip => _clip;
+        public int CurrentIndex => _currentFrame - 1;
 
         private AnimationClip _clip;
         private AnimationClipPlayable _playable;
