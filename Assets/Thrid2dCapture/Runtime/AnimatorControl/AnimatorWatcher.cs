@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.Playables;
 
 namespace com.knight.thrid2dcapture
 {
@@ -8,26 +6,46 @@ namespace com.knight.thrid2dcapture
     public class AnimatorWatcher : MonoBehaviour
     {
         public AnimationClip[] Clips;
-        private PlayableGraph _graph;
+
+        private PlayableController _playable;
+        private RotateController _rotate;
+        private int _currentClip = 0;
+        private bool _isFinished;
 
         public void Start()
         {
-            var animator = GetComponent<Animator>();
-            _graph = PlayableGraph.Create("Animation Playable");
-            _graph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-
             if (Clips.Length == 0) return;
-            var playable = AnimationClipPlayable.Create(_graph, Clips[0]);
-            var output = AnimationPlayableOutput.Create(_graph, "Output", animator);
-            output.SetSourcePlayable(playable);
+            _playable = new PlayableController(GetComponent<Animator>());
+            _rotate = new RotateController(gameObject);
+            _currentClip = 0;
 
-            
-            _graph.Play();
+            _playable.InitClip(Clips[0]);
+            _isFinished = false;
+        }
+
+        public void Update()
+        {
+            if (_isFinished) return;
+            if (_playable == null) return;
+            if (!_playable.GoNextFrame())
+            {
+                if (_currentClip < Clips.Length - 1)
+                {
+                    ++_currentClip;
+                    _playable.InitClip(Clips[_currentClip]);
+                }
+                else
+                {
+                    _currentClip = 0;
+                    _isFinished = !_rotate.GetNextRotate();
+                    _playable.InitClip(Clips[_currentClip]);
+                }
+            }
         }
 
         public void OnDestroy()
         {
-            _graph.Destroy();
+            _playable?.Dispose();
         }
     }
 }

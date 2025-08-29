@@ -21,8 +21,8 @@ namespace com.knight.thrid2dcapture
         public bool GetNextRotate()
         {
             if (_currentRotateIndex >= Divid) return false;
-            var rotate = GetRotate(_currentRotateIndex);
             ++_currentRotateIndex;
+            var rotate = GetRotate(_currentRotateIndex);
 
             ControlGameObject.transform.rotation = rotate;
             return true;

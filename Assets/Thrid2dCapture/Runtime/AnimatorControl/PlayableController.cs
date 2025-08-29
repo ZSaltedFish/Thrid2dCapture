@@ -48,6 +48,7 @@ namespace com.knight.thrid2dcapture
 
             _currentFrame = 0;
             _frameCount = (int)(clip.length * clip.frameRate);
+            _playable.Play();
         }
 
         /// <summary>
@@ -59,7 +60,9 @@ namespace com.knight.thrid2dcapture
             if (!_inited) throw new InvalidOperationException("尚未初始化");
             if (_currentFrame >= _frameCount) return false;
             var timeLerp = (double)_currentFrame / _frameCount;
+            ++_currentFrame;
             _playable.SetTime(timeLerp * _clip.length);
+            _graph.Evaluate(0);
             return true;
         }
     }
