@@ -205,6 +205,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.zknight.pmxreader": {
+      "version": "https://github.com/ZSaltedFish/PmxReader.git?path=Assets/PmxReader",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "53c1d5b8f371e45582400cf416a38dadb5b2d9cf"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

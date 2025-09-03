@@ -1,0 +1,16 @@
+{
+    "name": "com.zknight.TASLERender",
+    "displayName": "TASLERender",
+    "version": "1.0.0",
+    "description": "PBR shader for TASLE project",
+    "unity": "6000.0.26f1",
+    "author": {
+      "name": "ZKnight"
+    },
+    "keywords": [
+      "reader",
+      "unity"
+    ],
+    "hideInEditor": false
+  }
+  
