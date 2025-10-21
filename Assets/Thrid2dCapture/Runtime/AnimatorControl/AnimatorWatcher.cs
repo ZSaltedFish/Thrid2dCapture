@@ -4,6 +4,7 @@ namespace com.knight.thrid2dcapture
 {
     [RequireComponent(typeof(ScreenShoot))]
     [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(CameraControl))]
     public class AnimatorWatcher : MonoBehaviour
     {
         public AnimationClip[] Clips;
