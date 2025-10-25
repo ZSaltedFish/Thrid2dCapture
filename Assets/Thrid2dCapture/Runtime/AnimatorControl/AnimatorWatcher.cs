@@ -14,6 +14,7 @@ namespace com.knight.thrid2dcapture
         private RotateController _rotate;
         private int _currentClip = 0;
         private bool _isFinished;
+        private bool _start = false;
 
         public void Start()
         {
@@ -27,8 +28,14 @@ namespace com.knight.thrid2dcapture
             _isFinished = false;
         }
 
+        public void StartCatch()
+        {
+            _start = true;
+        }
+
         public void Update()
         {
+            if (!_start) return;
             if (_isFinished) return;
             if (_playable == null) return;
             if (!_playable.GoNextFrame())
@@ -49,6 +56,7 @@ namespace com.knight.thrid2dcapture
 
         public void LateUpdate()
         {
+            if (!_start) return;
             if (_isFinished) return;
             if (!Shoot) return;
 

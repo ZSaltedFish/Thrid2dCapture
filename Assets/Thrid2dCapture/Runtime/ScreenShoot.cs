@@ -14,7 +14,13 @@ namespace com.knight.thrid2dcapture
             if (!TargetCamera) return;
 
             var bytes = CaptureCamera();
-            var name = Path.Combine(SavePath, $"{charName}_{rotate}_{animName}_{index}.png");
+            var name = Path.Combine(SavePath, animName, $"{charName}_{rotate}_{animName}_{index}.png");
+
+            var fileDirection = Path.GetDirectoryName(name);
+            if (!Directory.Exists(fileDirection)) 
+            {
+                Directory.CreateDirectory(fileDirection);
+            }
 
             try
             {
