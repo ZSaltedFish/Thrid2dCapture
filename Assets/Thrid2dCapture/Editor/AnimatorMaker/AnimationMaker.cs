@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -60,32 +59,53 @@ namespace com.knight.thrid2dcapture
         {
             if (string.IsNullOrEmpty(_clipPath))
             {
-                Debug.LogError("Ã»ÓÐÉè¶¨ClipÎÄ¼þÃû");
+                Debug.LogError("Ã»ï¿½ï¿½ï¿½è¶¨Clipï¿½Ä¼ï¿½ï¿½ï¿½");
                 return;
             }
 
             if (string.IsNullOrEmpty(_imagePath))
             {
-                Debug.LogError("Ã»ÓÐÉè¶¨Í¼Æ¬Â·¾¶");
+                Debug.LogError("Ã»ï¿½ï¿½ï¿½è¶¨Í¼Æ¬Â·ï¿½ï¿½");
                 return;
             }
 
             DividPathAndName(_clipPath, out var name, out var path);
             if (string.IsNullOrEmpty(name))
             {
-                Debug.LogError("»ñÈ¡NameÊ§°Ü");
+                Debug.LogError("ï¿½ï¿½È¡NameÊ§ï¿½ï¿½");
                 return;
             }
 
             if (string.IsNullOrEmpty(path))
             {
-                Debug.LogError("»ñÈ¡PathÊ§°Ü");
+                Debug.LogError("ï¿½ï¿½È¡PathÊ§ï¿½ï¿½");
                 return;
             }
 
             var clip = CreateAnimationClip(_imagePath, name);
             SaveClip(_clipPath, clip);
         }
+
+        #region Static public method to create clip
+        public static void CreateAndSaveClip(string clipPath, string imagePath)
+        {
+            DividPathAndName(clipPath, out var name, out var path);
+            if (string.IsNullOrEmpty(name))
+            {
+                Debug.LogError("ï¿½ï¿½È¡NameÊ§ï¿½ï¿½");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.LogError("ï¿½ï¿½È¡PathÊ§ï¿½ï¿½");
+                return;
+            }
+
+            var clip = CreateAnimationClip(imagePath, name);
+            SaveClip(clipPath, clip);
+        }
+        #endregion
 
         #region Load PNG
 
