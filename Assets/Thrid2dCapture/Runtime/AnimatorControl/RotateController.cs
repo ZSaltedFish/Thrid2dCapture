@@ -4,16 +4,14 @@ namespace com.knight.thrid2dcapture
 {
     public class RotateController
     {
-        public const int Divid = 16;
+        public RotateType CurrentIndex => _currentRotateIndex;
 
-        public int CurrentIndex => _currentRotateIndex;
-
-        private GameObject ControlGameObject;
-        private int _currentRotateIndex;
+        private readonly GameObject _controlGameObject;
+        private RotateType _currentRotateIndex;
 
         public RotateController(GameObject controlGameObject)
         {
-            ControlGameObject = controlGameObject;
+            _controlGameObject = controlGameObject;
             _currentRotateIndex = 0;
         }
 
@@ -23,18 +21,20 @@ namespace com.knight.thrid2dcapture
         /// <returns>如果已经旋转一圈，返回False</returns>
         public bool GetNextRotate()
         {
-            if (_currentRotateIndex >= Divid) return false;
+            if (_currentRotateIndex >= RotateType.End) return false;
             ++_currentRotateIndex;
             var rotate = GetRotate(_currentRotateIndex);
 
-            ControlGameObject.transform.rotation = rotate;
+            _controlGameObject.transform.rotation = rotate;
             return true;
         }
         
-        private static Quaternion GetRotate(int index)
+        private static Quaternion GetRotate(RotateType rotateType)
         {
-            var lerp = index % Divid;
-            var angle = lerp * 360.0f / Divid;
+            int end = (int)RotateType.End;
+            int index = (int)rotateType;
+            var lerp = index % end;
+            var angle = lerp * 360.0f / end;
             return Quaternion.AngleAxis(angle, Vector3.up);
         }
     }

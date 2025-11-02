@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 namespace com.knight.thrid2dcapture
 {
@@ -52,6 +53,12 @@ namespace com.knight.thrid2dcapture
                     _playable.InitClip(Clips[_currentClip]);
                 }
             }
+
+            if (_isFinished)
+            {
+                Debug.Log("AnimatorWatcher Finish Capture, To create AnimationClip");
+                CreateAnimationClip();
+            }
         }
 
         public void LateUpdate()
@@ -70,6 +77,22 @@ namespace com.knight.thrid2dcapture
         public void OnDestroy()
         {
             _playable?.Dispose();
+        }
+
+        private void CreateAnimationClip()
+        {
+            var savePath = Shoot.SavePath;
+            savePath = savePath[savePath.IndexOf("Assets")..];
+            foreach (var clip in Clips)
+            {
+                var subDires = Directory.GetDirectories(savePath, $"{name}_{clip.name}_*", SearchOption.TopDirectoryOnly);
+                foreach (var imagePath in subDires)
+                {
+                    var clipName = $"{Path.GetFileName(imagePath)}.anim";
+                    var clipPath = Path.Combine(imagePath, clipName);
+                    AnimationMaker.CreateAndSaveClip(clipPath, imagePath);
+                }
+            }
         }
     }
 }
