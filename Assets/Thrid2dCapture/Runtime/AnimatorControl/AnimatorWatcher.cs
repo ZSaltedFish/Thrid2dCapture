@@ -84,6 +84,9 @@ namespace com.knight.thrid2dcapture
         {
             var savePath = Shoot.SavePath;
             savePath = savePath[savePath.IndexOf("Assets")..];
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
             foreach (var clip in Clips)
             {
                 var subDires = Directory.GetDirectories(savePath, $"{name}_{clip.name}_*", SearchOption.TopDirectoryOnly);
@@ -92,6 +95,7 @@ namespace com.knight.thrid2dcapture
                 {
                     var clipName = $"{Path.GetFileName(imagePath)}.anim";
                     var clipPath = Path.Combine(imagePath, clipName);
+                    SpriteSetting.SetPathTextue2Sprite(imagePath);
                     AnimationMaker.CreateAndSaveClip(clipPath, imagePath);
                 }
             }
