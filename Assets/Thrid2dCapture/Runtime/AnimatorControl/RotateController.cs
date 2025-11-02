@@ -25,7 +25,7 @@ namespace com.knight.thrid2dcapture
             ++_currentRotateIndex;
             var rotate = GetRotate(_currentRotateIndex);
 
-            _controlGameObject.transform.rotation = rotate;
+            _controlGameObject.transform.localRotation = rotate;
             return true;
         }
         

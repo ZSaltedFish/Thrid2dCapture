@@ -51,6 +51,7 @@ namespace com.knight.thrid2dcapture
                     _currentClip = 0;
                     _isFinished = !_rotate.GetNextRotate();
                     _playable.InitClip(Clips[_currentClip]);
+                    _ = _playable.GoNextFrame();
                 }
             }
 
@@ -86,6 +87,7 @@ namespace com.knight.thrid2dcapture
             foreach (var clip in Clips)
             {
                 var subDires = Directory.GetDirectories(savePath, $"{name}_{clip.name}_*", SearchOption.TopDirectoryOnly);
+                Debug.Log($"Now create {clip}");
                 foreach (var imagePath in subDires)
                 {
                     var clipName = $"{Path.GetFileName(imagePath)}.anim";
