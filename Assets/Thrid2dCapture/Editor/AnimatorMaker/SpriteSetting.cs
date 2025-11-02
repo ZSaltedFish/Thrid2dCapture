@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace com.knight.thrid2dcapture
@@ -7,11 +8,14 @@ namespace com.knight.thrid2dcapture
     {
         public static void SetPathTextue2Sprite(string path)
         {
-            var texGUIDs = AssetDatabase.FindAssetGUIDs("t:Texture2D", new[] { path });
+            // texGUIDs = AssetDatabase.FindAssetGUIDs("t:Texture2D", new[] { path });
+            var files = Directory.GetFiles(path, "*.png");
             var count = 0;
-            foreach (var texGUID in texGUIDs)
+            Debug.Log($"导出图片({path}), Count={files.Length}");
+            foreach (var file in files)
             {
-                var texPath = AssetDatabase.GUIDToAssetPath(texGUID);
+                var texPath = file[file.LastIndexOf("Assets")..];
+                //var texPath = AssetDatabase.GUIDToAssetPath(texGUID);
                 var importer = AssetImporter.GetAtPath(texPath) as TextureImporter;
 
                 if (!importer) continue;

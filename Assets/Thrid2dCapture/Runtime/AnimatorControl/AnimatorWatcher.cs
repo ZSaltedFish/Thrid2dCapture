@@ -85,6 +85,7 @@ namespace com.knight.thrid2dcapture
             var savePath = Shoot.SavePath;
             savePath = savePath[savePath.IndexOf("Assets")..];
 #if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
             UnityEditor.EditorApplication.isPlaying = false;
 #endif
             foreach (var clip in Clips)

@@ -116,11 +116,12 @@ namespace com.knight.thrid2dcapture
             AssetDatabase.Refresh();
         }
 
-        private static AnimationClip CreateAnimationClip(string imagePath, string clipName)
+        private static AnimationClip CreateAnimationClip(string imagePath, string clipName, float rate = 30)
         {
             var clip = new AnimationClip()
             {
                 name = clipName,
+                frameRate = rate
             };
 
             LoadTexture2D(clip, imagePath);
@@ -132,6 +133,7 @@ namespace com.knight.thrid2dcapture
             var assets = LoadAllAssets(srcPath);
             var index = 0;
             var fps = clip.frameRate;
+            Debug.Log($"准备生成{clip} rate:{fps} length:{clip.length}");
 
             var list = new List<ObjectReferenceKeyframe>();
             
