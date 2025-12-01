@@ -59,12 +59,18 @@ namespace com.knight.thrid2dcapture
         public bool GoNextFrame()
         {
             if (!_inited) throw new InvalidOperationException("尚未初始化");
-            if (_currentFrame >= _frameCount) return false;
+            if (_currentFrame > _frameCount) return false;
             var timeLerp = (double)_currentFrame / _frameCount;
             ++_currentFrame;
             _playable.SetTime(timeLerp * _clip.length);
             _graph.Evaluate(0);
             return true;
+        }
+
+        public void SetToStart()
+        {
+            _playable.SetTime(0);
+            _graph.Evaluate(0);
         }
     }
 }

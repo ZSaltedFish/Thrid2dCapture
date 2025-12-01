@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f162b1748b4708b43bd4ac10c519dc78
+guid: 33a3c7b3b0f909b41b4ced219e54804e
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,11 +31,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Samurai_Skill1
+      name: Samurai_Idle
       takeName: Scene
       internalID: -623603649343465320
       firstFrame: 1
-      lastFrame: 23
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -58,7 +58,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      additiveReferencePoseFrame: 1
     isReadable: 0
   meshes:
     lODScreenPercentages: []

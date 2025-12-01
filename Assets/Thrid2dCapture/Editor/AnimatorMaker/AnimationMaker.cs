@@ -87,7 +87,7 @@ namespace com.knight.thrid2dcapture
         }
 
         #region Static public method to create clip
-        public static void CreateAndSaveClip(string clipPath, string imagePath)
+        public static void CreateAndSaveClip(string clipPath, string imagePath, bool isLooping)
         {
             DividPathAndName(clipPath, out var name, out var path);
             if (string.IsNullOrEmpty(name))
@@ -103,6 +103,13 @@ namespace com.knight.thrid2dcapture
             }
 
             var clip = CreateAnimationClip(imagePath, name);
+            if (isLooping)
+            {
+                var settings = AnimationUtility.GetAnimationClipSettings(clip);
+                settings.loopTime = true;
+                AnimationUtility.SetAnimationClipSettings(clip, settings);
+                clip.wrapMode = WrapMode.Loop;
+            }
             SaveClip(clipPath, clip);
         }
         #endregion
@@ -112,8 +119,6 @@ namespace com.knight.thrid2dcapture
         private static void SaveClip(string clipPath, AnimationClip clip)
         {
             AssetDatabase.CreateAsset(clip, clipPath);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         private static AnimationClip CreateAnimationClip(string imagePath, string clipName, float rate = 30)

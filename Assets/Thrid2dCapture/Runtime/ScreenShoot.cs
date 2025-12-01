@@ -8,6 +8,14 @@ namespace com.knight.thrid2dcapture
     {
         public Camera TargetCamera;
         public string SavePath;
+        public string AssetRootPath
+        {
+            get
+            {
+                var path = SavePath[SavePath.IndexOf("Assets")..];
+                return path;
+            }
+        }
 
         public void OutputShoot(string charName, string rotate, string animName, int index)
         {
@@ -15,6 +23,7 @@ namespace com.knight.thrid2dcapture
 
             var bytes = CaptureCamera();
             var name = Path.Combine(SavePath, $"{charName}_{animName}_{rotate}", $"{index}.png");
+            Debug.Log($"Output: {name}");
 
             var fileDirection = Path.GetDirectoryName(name);
             if (!Directory.Exists(fileDirection)) 
