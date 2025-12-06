@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor.Animations;
+using UnityEditor.Overlays;
 
 namespace com.knight.thrid2dcapture
 {
@@ -107,6 +109,105 @@ namespace com.knight.thrid2dcapture
                     transition.duration = 0;
                     transition.hasFixedDuration = false;
                 }
+            }
+        }
+        #endregion
+
+        #region Die处理
+        private void ExecuteDie()
+        {
+            DieInput();
+        }
+
+        private void DieInput()
+        {
+            var input = _rootMachine.AddAnyStateTransition(_dieMotion.ActionStateMachine);
+            input.AddCondition(AnimatorConditionMode.If, 1, ActionType.Die.ToString());
+            input.canTransitionToSelf = false;
+            input.hasFixedDuration = false;
+            input.duration = 0;
+        }
+        #endregion
+
+        #region Hit处理
+        private void ExecuteHit()
+        {
+            HitInput();
+        }
+
+        private void HitInput()
+        {
+            //throw new NotImplementedException();
+            // TO-DO: Hit逻辑待补充
+        }
+        #endregion
+
+        #region Attack处理
+        private void ExecuteAttack()
+        {
+            AttackInput();
+        }
+
+        private void AttackInput()
+        {
+            foreach (var action in _attacksMotion)
+            {
+                FromIdleInput(action);
+                FromMoveInput(action);
+            }
+
+            for (var i = 0; i < _attacksMotion.Count; ++i)
+            {
+                for (var j = 0; j < _attacksMotion.Count; ++j)
+                {
+                    if (i == j) continue;
+
+                    var fromAction = _attacksMotion[i];
+                    var toAction = _attacksMotion[j];
+
+                    for (var k = 0; k < (int)RotateType.End; ++k)
+                    {
+                        var rotate = (RotateType)k;
+                        var fromState = fromAction[rotate];
+                        var toState = toAction[rotate];
+
+                        var transition = fromState.AddTransition(toState);
+                        transition.AddCondition(AnimatorConditionMode.If, 1, toAction.ActionType.ToString());
+                        transition.hasExitTime = false;
+                        transition.duration = 0;
+                        transition.hasFixedDuration = false;
+                    }
+                }
+            }
+        }
+
+        private void FromIdleInput(ActionMotions action)
+        {
+            for (var i = 0; i < (int)RotateType.End; ++i)
+            {
+                var rotate = (RotateType)i;
+                var state = action[rotate];
+
+                var transition = _idleMotion[rotate].AddTransition(state);
+                transition.AddCondition(AnimatorConditionMode.If, 1, action.ActionType.ToString());
+                transition.hasExitTime = false;
+                transition.duration = 0;
+                transition.hasFixedDuration = false;
+            }
+        }
+
+        private void FromMoveInput(ActionMotions action)
+        {
+            for (var i = 0; i < (int)RotateType.End; ++i)
+            {
+                var rotate = (RotateType)i;
+                var state = action[rotate];
+
+                var transition = _moveMotion[rotate].AddTransition(state);
+                transition.AddCondition(AnimatorConditionMode.If, 1, action.ActionType.ToString());
+                transition.hasExitTime = false;
+                transition.duration = 0;
+                transition.hasFixedDuration = false;
             }
         }
         #endregion
