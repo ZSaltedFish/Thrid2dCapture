@@ -19,6 +19,5 @@ namespace com.knight.thrid2dcapture
         Forward2Left2,
         Forward3Left1,
         End
-
     }
 }

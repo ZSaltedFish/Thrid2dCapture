@@ -74,18 +74,20 @@ namespace com.knight.thrid2dcapture
                 {
                     ++_currentClip;
                     _playable.InitClip(_playableClips[_currentClip]);
-                    _ = _playable.GoNextFrame();
+                    _playable.SetToStart();
                 }
                 else
                 {
                     _currentClip = 0;
                     _isFinished = !_rotate.GetNextRotate();
                     _playable.InitClip(_playableClips[_currentClip]);
-                    _ = _playable.GoNextFrame();
+                    _playable.SetToStart();
                 }
             }
-
-            _hasOutput = true;
+            else
+            {
+                _hasOutput = true;
+            }
 
             if (NoOutputModel) return;
 
@@ -96,15 +98,17 @@ namespace com.knight.thrid2dcapture
                 CreateAnimationClip();
 
 #if UNITY_EDITOR
-                var controller = new UnityEditor.Animations.AnimatorController();
+                var controller = new AnimatorController();
                 var path = Path.Combine(Shoot.AssetRootPath, $"{name}.controller");
+                AssetDatabase.CreateAsset(controller, path);
+                controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
 
                 var rootSM = new AnimatorStateMachine
                 {
-                    name = "Base Layer ",
+                    name = "Base Layer",
                     hideFlags = HideFlags.HideInHierarchy
                 };
-                //AssetDatabase.AddObjectToAsset(controller, rootSM);
+                AssetDatabase.AddObjectToAsset(rootSM, controller);
 
                 var baseLayer = new AnimatorControllerLayer
                 {
@@ -114,7 +118,6 @@ namespace com.knight.thrid2dcapture
                 };
                 controller.layers = new[] { baseLayer };
                 AnimatorRotate.CreateRotateAnimator(controller, jsonPath);
-                UnityEditor.AssetDatabase.CreateAsset(controller, path);
 
                 AssetDatabase.SaveAssets();
                 AssetDatabase.ImportAsset(path);
@@ -183,7 +186,7 @@ namespace com.knight.thrid2dcapture
                 Debug.LogError($"{charName} {animName} {index} {rotate}");
                 _isFinished = false;
 #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
+                EditorApplication.isPlaying = false;
 #endif
             }
             Shoot.OutputShoot(charName, rotate, animName, index);
@@ -200,8 +203,8 @@ namespace com.knight.thrid2dcapture
             var savePath = Shoot.SavePath;
             savePath = savePath[savePath.IndexOf("Assets")..];
 #if UNITY_EDITOR
-            UnityEditor.AssetDatabase.Refresh();
-            UnityEditor.EditorApplication.isPlaying = false;
+            AssetDatabase.Refresh();
+            EditorApplication.isPlaying = false;
 #endif
             foreach (var clip in _playableClips)
             {

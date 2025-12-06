@@ -48,7 +48,7 @@ namespace com.knight.thrid2dcapture
             _output.SetSourcePlayable(_playable);
 
             _currentFrame = 0;
-            _frameCount = (int)(clip.length * clip.frameRate);
+            _frameCount = Mathf.RoundToInt(clip.length * clip.frameRate);
             _playable.Play();
         }
 

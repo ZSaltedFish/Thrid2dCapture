@@ -21,8 +21,8 @@ namespace com.knight.thrid2dcapture
         /// <returns>如果已经旋转一圈，返回False</returns>
         public bool GetNextRotate()
         {
-            if (_currentRotateIndex >= RotateType.End) return false;
             ++_currentRotateIndex;
+            if (_currentRotateIndex >= RotateType.End) return false;
             var rotate = GetRotate(_currentRotateIndex);
 
             _controlGameObject.transform.localRotation = rotate;
