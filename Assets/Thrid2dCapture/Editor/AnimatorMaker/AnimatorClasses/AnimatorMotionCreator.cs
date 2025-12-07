@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor.Animations;
-using UnityEditor.Overlays;
 
 namespace com.knight.thrid2dcapture
 {
@@ -32,7 +30,7 @@ namespace com.knight.thrid2dcapture
 
             for (var i = (int)ActionType.SpecialAttack; i < (int)ActionType.Skill3; ++i)
             {
-                var actionJson = json.ActionJsons.First(t => t.Type == (ActionType)i);
+                var actionJson = json.ActionJsons.FirstOrDefault(t => t.Type == (ActionType)i);
                 if (actionJson == null) continue;
 
                 var motion = new ActionMotions((ActionType)i);
@@ -41,6 +39,16 @@ namespace com.knight.thrid2dcapture
             }
 
             _rootMachine = ctrl.layers[0].stateMachine;
+            AnimatorRotate.TryCreateParam(ctrl);
+        }
+
+        public void Execute()
+        {
+            ExecuteIdle();
+            ExecuteMove();
+            ExecuteHit();
+            ExecuteDie();
+            ExecuteAttack();
         }
 
         #region Idle处理

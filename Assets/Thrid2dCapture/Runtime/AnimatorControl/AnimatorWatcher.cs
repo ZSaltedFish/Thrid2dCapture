@@ -117,7 +117,9 @@ namespace com.knight.thrid2dcapture
                     stateMachine = rootSM
                 };
                 controller.layers = new[] { baseLayer };
-                AnimatorRotate.CreateRotateAnimator(controller, jsonPath);
+                //AnimatorRotate.CreateRotateAnimator(controller, jsonPath);
+                var creator = new AnimatorMotionCreator(controller, jsonPath);
+                creator.Execute();
 
                 AssetDatabase.SaveAssets();
                 AssetDatabase.ImportAsset(path);

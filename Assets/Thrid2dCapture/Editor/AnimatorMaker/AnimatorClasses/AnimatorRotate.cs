@@ -99,7 +99,7 @@ namespace com.knight.thrid2dcapture
             return states;
         }
 
-        private static void TryCreateParam(AnimatorController controller)
+        public static void TryCreateParam(AnimatorController controller)
         {
             if (HasParam(controller, ROTATE_NAME)) return;
 
@@ -111,6 +111,8 @@ namespace com.knight.thrid2dcapture
                 var paramType = ACTION_ANIM_CTRL_TYPE[actionType];
                 controller.AddParameter(actionType.ToString(), paramType);
             }
+
+            controller.AddParameter("AttackPlaybackSpeed", AnimatorControllerParameterType.Float);
         }
 
         private static AnimatorStateMachine CreateSubState(AnimatorController controller, ActionType action, string path, string charName, string animationName)
