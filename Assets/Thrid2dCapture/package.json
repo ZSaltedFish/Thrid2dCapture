@@ -1,9 +1,8 @@
 {
-    "name": "com.zknight.Thrid2dCapture",
+    "name": "com.zknight.thrid2dcapture",
     "displayName": "Thrid2dCapture",
     "version": "1.0.0",
     "description": "A Unity package to create 2d piture by 3d mode.",
-    "unity": "6000.0.26f1",
     "author": {
       "name": "ZKnight"
     },
