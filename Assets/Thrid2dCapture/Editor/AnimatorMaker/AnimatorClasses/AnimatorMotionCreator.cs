@@ -19,10 +19,10 @@ namespace com.knight.thrid2dcapture
         public AnimatorMotionCreator(AnimatorController ctrl, string jsonPath)
         {
             var json = JsonConvert.DeserializeObject<GenJson>(File.ReadAllText(jsonPath));
-            _idleMotion.CreateState(ctrl, json);
-            _moveMotion.CreateState(ctrl, json);
-            _dieMotion.CreateState(ctrl, json);
-            _hitMotion.CreateState(ctrl, json);
+            _idleMotion.CreateStateWithoutTransition(ctrl, json);
+            _moveMotion.CreateStateWithoutTransition(ctrl, json);
+            _dieMotion.CreateStateWithoutTransition(ctrl, json);
+            _hitMotion.CreateStateWithoutTransition(ctrl, json);
 
             var attackMotion = new ActionMotions(ActionType.Attack);
             attackMotion.CreateState(ctrl, json);
@@ -60,11 +60,18 @@ namespace com.knight.thrid2dcapture
 
         private void IdleInput()
         {
-            var input = _rootMachine.AddAnyStateTransition(_idleMotion.ActionStateMachine);
-            input.AddCondition(AnimatorConditionMode.If, 1, ActionType.Idle.ToString());
-            input.canTransitionToSelf = false;
-            input.hasFixedDuration = false;
-            input.duration = 0;
+            for (var i = 0; i < (int)RotateType.End; ++i)
+            {
+                var rotate = (RotateType)i;
+                var rotateMotion = _idleMotion[rotate];
+                var transition = _rootMachine.AddAnyStateTransition(rotateMotion);
+                transition.canTransitionToSelf = false;
+                transition.exitTime = 0;
+                transition.duration = 0;
+                transition.hasFixedDuration = false;
+                transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Idle.ToString());
+                transition.AddCondition(AnimatorConditionMode.Equals, (int)rotate, ActionMotions.ROTATE_NAME);
+            }
         }
 
         private void AttackToIdle()
@@ -95,11 +102,18 @@ namespace com.knight.thrid2dcapture
 
         private void MoveInput()
         {
-            var input = _rootMachine.AddAnyStateTransition(_moveMotion.ActionStateMachine);
-            input.AddCondition(AnimatorConditionMode.If, 1, ActionType.Move.ToString());
-            input.canTransitionToSelf = false;
-            input.hasFixedDuration = false;
-            input.duration = 0;
+            for (var i = 0; i < (int)RotateType.End; ++i)
+            {
+                var rotate = (RotateType)i;
+                var rotateMotion = _moveMotion[rotate];
+                var transition = _rootMachine.AddAnyStateTransition(rotateMotion);
+                transition.canTransitionToSelf = false;
+                transition.exitTime = 0;
+                transition.duration = 0;
+                transition.hasFixedDuration = false;
+                transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Move.ToString());
+                transition.AddCondition(AnimatorConditionMode.Equals, (int)rotate, ActionMotions.ROTATE_NAME);
+            }
         }
 
         private void AttackToMove()
@@ -129,11 +143,18 @@ namespace com.knight.thrid2dcapture
 
         private void DieInput()
         {
-            var input = _rootMachine.AddAnyStateTransition(_dieMotion.ActionStateMachine);
-            input.AddCondition(AnimatorConditionMode.If, 1, ActionType.Die.ToString());
-            input.canTransitionToSelf = false;
-            input.hasFixedDuration = false;
-            input.duration = 0;
+            for (var i = 0; i < (int)RotateType.End; ++i)
+            {
+                var rotate = (RotateType)i;
+                var rotateMotion = _dieMotion[rotate];
+                var transition = _rootMachine.AddAnyStateTransition(rotateMotion);
+                transition.canTransitionToSelf = false;
+                transition.exitTime = 0;
+                transition.duration = 0;
+                transition.hasFixedDuration = false;
+                transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Die.ToString());
+                transition.AddCondition(AnimatorConditionMode.Equals, (int)rotate, ActionMotions.ROTATE_NAME);
+            }
         }
         #endregion
 
