@@ -9,6 +9,7 @@ namespace com.knight.thrid2dcapture
         public Camera MainCamera;
         public string SavePath;
         public Material MergeMaterial;
+        public LayerMask MaskCameraLayer;
         private RenderTexture _targetTexture, _maskTexture;
         private Camera _targetCamera, _maskCamera;
         public string AssetRootPath
@@ -59,6 +60,16 @@ namespace com.knight.thrid2dcapture
                 _maskTexture.Release();
                 DestroyImmediate(_maskTexture);
             }
+
+            if (_targetCamera)
+            {
+                Destroy(_targetCamera.gameObject);
+            }
+
+            if (_maskCamera)
+            {
+                Destroy(_maskCamera.gameObject);
+            }
         }
 
         private byte[] CaptureCameraWithMask()
@@ -67,7 +78,10 @@ namespace com.knight.thrid2dcapture
             if (!_targetTexture || !_maskTexture) InitializeRenderTexture(Screen.width, Screen.height);
 
             _targetCamera.Render();
+
+            Shader.SetGlobalFloat("_MASKSWITCH", 1f);
             _maskCamera.Render();
+            Shader.SetGlobalFloat("_MASKSWITCH", 0f);
             var mergedTexture = MergeTexture(_targetCamera.targetTexture, _maskCamera.targetTexture);
             return mergedTexture.EncodeToPNG();
         }
@@ -87,7 +101,7 @@ namespace com.knight.thrid2dcapture
             }
         }
 
-        private void InitializedRenderCamera(int width, int height)
+        private void InitializedRenderCamera()
         {
             if (!_targetCamera)
             {
@@ -106,6 +120,7 @@ namespace com.knight.thrid2dcapture
                 _maskCamera.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
                 _maskCamera.transform.localScale = Vector3.one;
                 _maskCamera.CopyFrom(MainCamera);
+                _maskCamera.cullingMask = MaskCameraLayer;
                 _maskCamera.enabled = false;
             }
         }

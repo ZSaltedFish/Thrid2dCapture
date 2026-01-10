@@ -27,4 +27,13 @@ void UnpackAlpha_float(float AlphaIn, out float AlphaBit, out float ExtraData)
     AlphaBit = float(val & 1U);
     ExtraData = float((val >> 1) & 0x7FU) / 127.0f;
 }
+
+void AlphaSwitch_float(float3 colorRGB, float3 alpha, out float3 outColor)
+{
+#if _MASKSWITCH
+    outColor = alpha;
+#else
+    outColor = outColor;
+#endif
+}
 #endif
