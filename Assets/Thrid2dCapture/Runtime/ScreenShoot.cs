@@ -8,8 +8,8 @@ namespace com.knight.thrid2dcapture
     {
         public Camera MainCamera;
         public string SavePath;
-        public Material MergeMaterial;
         public LayerMask MaskCameraLayer;
+        public Vector2 Size = new(1024, 1024);
         private RenderTexture _targetTexture, _maskTexture;
         private Camera _targetCamera, _maskCamera;
         public string AssetRootPath
@@ -23,13 +23,12 @@ namespace com.knight.thrid2dcapture
 
         public void OutputShoot(string charName, string rotate, string animName, int index)
         {
-            if (!_targetCamera) return;
+            var rgbBytes = CaptureCamera();
+            var maskBytes = CaptureCameraMask();
+            var rgbName = Path.Combine($"{SavePath}/{charName}/{animName}", $"{rotate}_{index}.png");
+            var maskName = Path.Combine($"{SavePath}/{charName}/{animName}", $"{rotate}_{index}_mask.png");
 
-            var bytes = CaptureCameraWithMask();
-            var name = Path.Combine(SavePath, $"{charName}_{animName}_{rotate}", $"{index}.png");
-            Debug.Log($"Output: {name}");
-
-            var fileDirection = Path.GetDirectoryName(name);
+            var fileDirection = Path.GetDirectoryName(rgbName);
             if (!Directory.Exists(fileDirection)) 
             {
                 Directory.CreateDirectory(fileDirection);
@@ -37,7 +36,8 @@ namespace com.knight.thrid2dcapture
 
             try
             {
-                File.WriteAllBytes(name, bytes);
+                File.WriteAllBytes(rgbName, rgbBytes);
+                File.WriteAllBytes(maskName, maskBytes);
             }
             catch (Exception err)
             {
@@ -72,18 +72,35 @@ namespace com.knight.thrid2dcapture
             }
         }
 
-        private byte[] CaptureCameraWithMask()
+        private byte[] CaptureCamera()
         {
-            if (!_targetCamera || !_maskCamera) return null;
-            if (!_targetTexture || !_maskTexture) InitializeRenderTexture(Screen.width, Screen.height);
+            if (!_targetCamera || !_maskCamera) InitializedRenderCamera();
+            if (!_targetTexture || !_maskTexture) InitializeRenderTexture((int)Size.x, (int)Size.y);
 
             _targetCamera.Render();
+            var tex = new Texture2D(_targetCamera.targetTexture.width, _targetCamera.targetTexture.height, TextureFormat.RGBA32, false);
+            RenderTexture.active = _targetCamera.targetTexture;
+            tex.ReadPixels(new Rect(0, 0, _targetCamera.targetTexture.width, _targetCamera.targetTexture.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+            return tex.EncodeToPNG();
+        }
+
+        private byte[] CaptureCameraMask()
+        {
+            if (!_targetCamera || !_maskCamera) InitializedRenderCamera();
+            if (!_targetTexture || !_maskTexture) InitializeRenderTexture((int)Size.x, (int)Size.y);
 
             Shader.SetGlobalFloat("_MASKSWITCH", 1f);
             _maskCamera.Render();
             Shader.SetGlobalFloat("_MASKSWITCH", 0f);
-            var mergedTexture = MergeTexture(_targetCamera.targetTexture, _maskCamera.targetTexture);
-            return mergedTexture.EncodeToPNG();
+
+            var tex = new Texture2D(_maskCamera.targetTexture.width, _maskCamera.targetTexture.height, TextureFormat.R8, false);
+            RenderTexture.active = _maskCamera.targetTexture;
+            tex.ReadPixels(new Rect(0, 0, _maskCamera.targetTexture.width, _maskCamera.targetTexture.height), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+            return tex.EncodeToPNG();
         }
 
         private void InitializeRenderTexture(int width, int height)
@@ -124,33 +141,14 @@ namespace com.knight.thrid2dcapture
                 _maskCamera.enabled = false;
             }
         }
-
-        private Texture2D MergeTexture(Texture colorTex, Texture maskTex)
+        #region FOR_TESTING
+#if THRID2DCAPTURE
+        public void TryCaptureRenderTexture(out byte[] baseColorBytes, out byte[] maskBytes)
         {
-            if (!MergeMaterial)
-            {
-                Debug.LogError("Merge Material is null!");
-                return null;
-            }
-
-            var desc = new RenderTextureDescriptor(colorTex.width, colorTex.height, RenderTextureFormat.ARGB32)
-            {
-                sRGB = false
-            };
-
-            var rt = RenderTexture.GetTemporary(desc);
-            rt.filterMode = FilterMode.Point;
-
-            MergeMaterial.SetTexture("_MainTex", colorTex);
-            MergeMaterial.SetTexture("_MaskTex", maskTex);
-            Graphics.Blit(null, rt, MergeMaterial);
-            RenderTexture.active = rt;
-            var tex2D = new Texture2D(colorTex.width, colorTex.height, TextureFormat.RGBA32, false);
-            tex2D.ReadPixels(new Rect(0, 0, colorTex.width, colorTex.height), 0, 0);
-            tex2D.Apply();
-            RenderTexture.active = null;
-            RenderTexture.ReleaseTemporary(rt);
-            return tex2D;
+            baseColorBytes = CaptureCamera();
+            maskBytes = CaptureCameraMask();
         }
+#endif
+        #endregion
     }
 }

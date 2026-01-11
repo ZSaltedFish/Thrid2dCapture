@@ -1,0 +1,16 @@
+- 生成根目录
+    - 角色名文件夹(GameObject name)
+        - 动作名文件夹
+            - 朝向名_索引.png
+            - 朝向名_索引_mask.png
+            - AnimationClip
+            - baseColor贴图Array
+            - mask贴图Array
+        - 动作名文件夹
+            - 朝向名_索引.png
+            - 朝向名_索引_mask.png
+            - AnimationClip
+            - baseColor贴图Array
+            - mask贴图Array
+        - 动作详细信息.Json
+        - Animator

@@ -25,6 +25,7 @@ namespace com.knight.thrid2dcapture
         private GenJson _genJson;
         private PlayableController _playable;
         private RotateController _rotate;
+        private CameraControl _cameraControl;
         private int _currentClip = 0;
         private bool _isFinished;
         private bool _start = false;
@@ -36,11 +37,12 @@ namespace com.knight.thrid2dcapture
         public void Start()
         {
             if (Clips.Length == 0) return;
+            _cameraControl = GetComponent<CameraControl>();
             Shoot = GetComponent<ScreenShoot>();
             _playable = new PlayableController(GetComponent<Animator>());
             _rotate = new RotateController(gameObject);
             _currentClip = 0;
-
+            Shoot.Size = new Vector2(_cameraControl.Width, _cameraControl.Height);
             var actTypes = new List<ActionType>();
             var animations = new List<AnimationClip>();
             for (var i = 0; i < Clips.Length; ++i)
@@ -95,6 +97,12 @@ namespace com.knight.thrid2dcapture
             {
                 Debug.Log("AnimatorWatcher Finish Capture, To create AnimationClip");
                 var jsonPath = CreateJsonFile();
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+                var textureGen = new TextureArrayGen(_genJson);
+                textureGen.GenAllAnimTextureArray();
+#endif
+                return;
                 CreateAnimationClip();
 
 #if UNITY_EDITOR
@@ -117,7 +125,6 @@ namespace com.knight.thrid2dcapture
                     stateMachine = rootSM
                 };
                 controller.layers = new[] { baseLayer };
-                //AnimatorRotate.CreateRotateAnimator(controller, jsonPath);
                 var creator = new AnimatorMotionCreator(controller, jsonPath);
                 creator.Execute();
 
@@ -133,7 +140,11 @@ namespace com.knight.thrid2dcapture
         {
             var genJson = new GenJson()
             {
-                ActionJsons = new ActionJson[_playableClips.Length]
+                ActionJsons = new ActionJson[_playableClips.Length],
+                BasePath = Shoot.AssetRootPath,
+                CharName = name,
+                TextureWidth = _cameraControl.Width,
+                TextureHeight = _cameraControl.Height
             };
 
             var rotateTypes = (Enum.GetValues(typeof(RotateType)) as RotateType[]).ToList();
@@ -146,20 +157,16 @@ namespace com.knight.thrid2dcapture
                 if (!clip) continue;
                 var actionJson = new ActionJson()
                 {
-                    Type = actType
+                    Type = actType,
+                    AnimName = clip.name,
                 };
 
-                var rotateActionsList = new List<RotateActionJson>();
                 foreach (var rotateType in rotateTypes)
                 {
-                    var rotateActionJson = new RotateActionJson()
-                    {
-                        RotateType = rotateType,
-                        Path = $"{Shoot.AssetRootPath}/{name}_{clip.name}_{rotateType}/{name}_{clip.name}_{rotateType}.anim"
-                    };
-                    rotateActionsList.Add(rotateActionJson);
+                    actionJson.FrameCount = Mathf.RoundToInt(clip.length * clip.frameRate);
+                    actionJson.BaseColorTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, actType.ToString(), $"{name}_{actType}_BaseColorArray.asset").Replace('\\', '/');
+                    actionJson.MaskTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, actType.ToString(), $"{name}_{actType}_MaskArray.asset").Replace('\\', '/');
                 }
-                actionJson.RotateActions = rotateActionsList.ToArray();
                 genJson.ActionJsons[i] = actionJson;
             }
 
