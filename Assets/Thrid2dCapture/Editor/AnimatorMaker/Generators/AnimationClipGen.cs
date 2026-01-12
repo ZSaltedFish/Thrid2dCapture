@@ -45,7 +45,7 @@ namespace com.knight.thrid2dcapture
                 {
                     var keyFrame = new Keyframe()
                     {
-                        time = index * _genJson.Rate,
+                        time = index * _genJson.Rate * 0.001f,
                         value = rotateBaseIndex + index
                     };
                     kfArray[index] = keyFrame;

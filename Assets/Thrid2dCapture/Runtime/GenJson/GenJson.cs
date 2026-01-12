@@ -2,17 +2,9 @@
 
 namespace com.knight.thrid2dcapture
 {
-    [Obsolete("旧方法即将被淘汰")]
-    public class RotateActionJson
-    {
-        public RotateType RotateType;
-        public string Path;
-    }
 
     public class ActionJson
     {
-        [Obsolete("旧方法即将被淘汰")]
-        public RotateActionJson[] RotateActions;
         public ActionType Type;
         public int FrameCount;
         public string AnimName;

@@ -1,4 +1,5 @@
 #if THRID2DCAPTURE
+using Newtonsoft.Json;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace com.knight.thrid2dcapture
         public const string TEST_RENDER_TEXTURE_PATH = "Assets/RenderTextureTest.png";
         public const string TEST_RENDER_TEXTURE_MASK_PATH = "Assets/RenderTextureTest_mask.png";
 
-        [MenuItem("Thrid2dCapture/Test/SwitchRenderMaskKeyword")]
+        //[MenuItem("Thrid2dCapture/Test/SwitchRenderMaskKeyword")]
         public static void SwitchRenderMaskKeyword()
         {
             var current = Shader.GetGlobalFloat(RENDER_MASK_KEYWORD);
@@ -19,7 +20,7 @@ namespace com.knight.thrid2dcapture
             Shader.SetGlobalFloat(RENDER_MASK_KEYWORD, 1 - current);
         }
 
-        [MenuItem("Thrid2dCapture/Test/TryRenderTexture")]
+        //[MenuItem("Thrid2dCapture/Test/TryRenderTexture")]
         public static void TryRenderTexture()
         {
             if (!UnityEditor.EditorApplication.isPlaying) return;
@@ -48,6 +49,29 @@ namespace com.knight.thrid2dcapture
             {
                 Debug.LogError("RenderTexture Mask Test Failed");
             }
+
+            AssetDatabase.Refresh();
+        }
+
+        [MenuItem("Thrid2dCapture/Test/AnimationClipCreateTest")]
+        public static void AnimationClipCreateTest()
+        {
+            var jsonPath = "Assets/Res/Samurai_door/Samurai_door_json.json";
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
+            var genJson = JsonConvert.DeserializeObject<GenJson>(jsonAsset.text);
+
+            var clipGen = new AnimationClipGen(genJson);
+            clipGen.Generate();
+        }
+
+        [MenuItem("Thrid2dCapture/Test/AnimatorControllerCreateTest")]
+        public static void AnimatorControllerCreateTest()
+        {
+            var jsonPath = "Assets/Res/Samurai_door/Samurai_door_json.json";
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
+            var genJson = JsonConvert.DeserializeObject<GenJson>(jsonAsset.text);
+            var animatorGen = new AnimatorGen(genJson);
+            animatorGen.Generate();
 
             AssetDatabase.Refresh();
         }
