@@ -31,6 +31,8 @@ namespace com.knight.thrid2dcapture
         private void GenSimgleAnimTextureArray(ActionJson actionJson)
         {
             var actionPath = Path.Combine(_srcPath, actionJson.AnimName);
+
+            SetTextureReadWriteEnable(actionPath);
             var count = actionJson.FrameCount;
             var baseColorArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.RGBA32, false);
             var maskArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.R8, false);
@@ -62,6 +64,32 @@ namespace com.knight.thrid2dcapture
 
             AssetDatabase.CreateAsset(baseColorArray, baseColorArrayPath);
             AssetDatabase.CreateAsset(maskArray, maskArrayPath);
+        }
+
+        private static void SetTextureReadWriteEnable(string path)
+        {
+            var files = Directory.GetFiles(path, "*.png");
+            var count = 0;
+            foreach (var file in files)
+            {
+                var texPath = file[file.LastIndexOf("Assets")..];
+                var importer = AssetImporter.GetAtPath(texPath) as TextureImporter;
+
+                if (!importer)
+                {
+                    throw new FileNotFoundException($"No Texture Importer Found {texPath}");
+                }
+                ++count;
+
+                importer.isReadable = true;
+
+                EditorUtility.SetDirty(importer);
+                importer.SaveAndReimport();
+            }
+
+            AssetDatabase.Refresh();
+
+            Debug.Log($"重新加载了{count}个图片");
         }
     }
 }

@@ -102,7 +102,6 @@ namespace com.knight.thrid2dcapture
                 var textureGen = new TextureArrayGen(_genJson);
                 textureGen.GenAllAnimTextureArray();
 #endif
-                return;
                 CreateAnimationClip();
 
 #if UNITY_EDITOR
@@ -164,14 +163,14 @@ namespace com.knight.thrid2dcapture
                 foreach (var rotateType in rotateTypes)
                 {
                     actionJson.FrameCount = Mathf.RoundToInt(clip.length * clip.frameRate);
-                    actionJson.BaseColorTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, actType.ToString(), $"{name}_{actType}_BaseColorArray.asset").Replace('\\', '/');
-                    actionJson.MaskTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, actType.ToString(), $"{name}_{actType}_MaskArray.asset").Replace('\\', '/');
+                    actionJson.BaseColorTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, clip.name, $"{name}_{actType}_BaseColorArray.asset").Replace('\\', '/');
+                    actionJson.MaskTextureArrayPath = Path.Combine(Shoot.AssetRootPath, name, clip.name, $"{name}_{actType}_MaskArray.asset").Replace('\\', '/');
                 }
                 genJson.ActionJsons[i] = actionJson;
             }
 
             var serObj = JsonConvert.SerializeObject(genJson, Formatting.Indented);
-            var jsonPath = Path.Combine(Shoot.SavePath, "ReadJson.json");
+            var jsonPath = Path.Combine(Shoot.SavePath, name, "ReadJson.json");
             File.WriteAllText(jsonPath, serObj);
             _genJson = genJson;
             return jsonPath;

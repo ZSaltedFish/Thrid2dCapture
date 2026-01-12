@@ -18,6 +18,7 @@ namespace com.knight.thrid2dcapture
         public string AnimName;
         public string BaseColorTextureArrayPath;
         public string MaskTextureArrayPath;
+        public string[] AnimationClipPaths;
     }
 
     public class GenJson
@@ -27,5 +28,7 @@ namespace com.knight.thrid2dcapture
         public int TextureWidth;
         public int TextureHeight;
         public ActionJson[] ActionJsons;
+        public string ControllerPath;
+        public int Rate;
     }
 }
