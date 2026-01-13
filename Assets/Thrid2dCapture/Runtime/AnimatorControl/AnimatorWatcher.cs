@@ -22,9 +22,9 @@ namespace com.knight.thrid2dcapture
         public ScreenShoot Shoot;
         public bool NoOutputModel;
 
-        private GenJson _genJson;
         private PlayableController _playable;
         private RotateController _rotate;
+        private CameraControl _cameraControl;
         private int _currentClip = 0;
         private bool _isFinished;
         private bool _start = false;
@@ -36,11 +36,12 @@ namespace com.knight.thrid2dcapture
         public void Start()
         {
             if (Clips.Length == 0) return;
+            _cameraControl = GetComponent<CameraControl>();
             Shoot = GetComponent<ScreenShoot>();
             _playable = new PlayableController(GetComponent<Animator>());
             _rotate = new RotateController(gameObject);
             _currentClip = 0;
-
+            Shoot.Size = new Vector2(_cameraControl.Width, _cameraControl.Height);
             var actTypes = new List<ActionType>();
             var animations = new List<AnimationClip>();
             for (var i = 0; i < Clips.Length; ++i)
@@ -94,80 +95,53 @@ namespace com.knight.thrid2dcapture
             if (_isFinished)
             {
                 Debug.Log("AnimatorWatcher Finish Capture, To create AnimationClip");
-                var jsonPath = CreateJsonFile();
-                CreateAnimationClip();
+#if UNITY_EDITOR
+                var jsonObj = new JsonGen(_playableClips, _playableActionTypes, Shoot.AssetRootPath, name, _cameraControl.Width, _cameraControl.Height, 30);
+                var jsonPath = jsonObj.GenerateJson();
+                EditorApplication.isPlaying = false;
+                AssetDatabase.Refresh();
+
+                var textureGen = new TextureArrayGen(jsonPath);
+                textureGen.GenAllAnimTextureArray();
+
+                var clipGen = new AnimationClipGen(jsonPath);
+                clipGen.Generate();
+
+                var animatorGen = new AnimatorGen(jsonPath);
+                animatorGen.Generate();
+                AssetDatabase.Refresh();
+#endif
+                //CreateAnimationClip();
 
 #if UNITY_EDITOR
-                var controller = new AnimatorController();
-                var path = Path.Combine(Shoot.AssetRootPath, $"{name}.controller");
-                AssetDatabase.CreateAsset(controller, path);
-                controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
+                //var controller = new AnimatorController();
+                //var path = Path.Combine(Shoot.AssetRootPath, $"{name}.controller");
+                //AssetDatabase.CreateAsset(controller, path);
+                //controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
 
-                var rootSM = new AnimatorStateMachine
-                {
-                    name = "Base Layer",
-                    hideFlags = HideFlags.HideInHierarchy
-                };
-                AssetDatabase.AddObjectToAsset(rootSM, controller);
+                //var rootSM = new AnimatorStateMachine
+                //{
+                //    name = "Base Layer",
+                //    hideFlags = HideFlags.HideInHierarchy
+                //};
+                //AssetDatabase.AddObjectToAsset(rootSM, controller);
 
-                var baseLayer = new AnimatorControllerLayer
-                {
-                    name = "Base Layer",
-                    defaultWeight = 1.0f,
-                    stateMachine = rootSM
-                };
-                controller.layers = new[] { baseLayer };
-                //AnimatorRotate.CreateRotateAnimator(controller, jsonPath);
-                var creator = new AnimatorMotionCreator(controller, jsonPath);
-                creator.Execute();
+                //var baseLayer = new AnimatorControllerLayer
+                //{
+                //    name = "Base Layer",
+                //    defaultWeight = 1.0f,
+                //    stateMachine = rootSM
+                //};
+                //controller.layers = new[] { baseLayer };
+                //var creator = new AnimatorMotionCreator(controller, jsonPath);
+                //creator.Execute();
 
-                AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset(path);
-                AssetDatabase.Refresh();
+                //AssetDatabase.SaveAssets();
+                //AssetDatabase.ImportAsset(path);
+                //AssetDatabase.Refresh();
 
 #endif
             }
-        }
-
-        private string CreateJsonFile()
-        {
-            var genJson = new GenJson()
-            {
-                ActionJsons = new ActionJson[_playableClips.Length]
-            };
-
-            var rotateTypes = (Enum.GetValues(typeof(RotateType)) as RotateType[]).ToList();
-            rotateTypes.Remove(RotateType.End);
-            for (var i = 0; i < _playableClips.Length; ++i)
-            {
-                var actType = _playableActionTypes[i];
-                var clip = _playableClips[i];
-
-                if (!clip) continue;
-                var actionJson = new ActionJson()
-                {
-                    Type = actType
-                };
-
-                var rotateActionsList = new List<RotateActionJson>();
-                foreach (var rotateType in rotateTypes)
-                {
-                    var rotateActionJson = new RotateActionJson()
-                    {
-                        RotateType = rotateType,
-                        Path = $"{Shoot.AssetRootPath}/{name}_{clip.name}_{rotateType}/{name}_{clip.name}_{rotateType}.anim"
-                    };
-                    rotateActionsList.Add(rotateActionJson);
-                }
-                actionJson.RotateActions = rotateActionsList.ToArray();
-                genJson.ActionJsons[i] = actionJson;
-            }
-
-            var serObj = JsonConvert.SerializeObject(genJson, Formatting.Indented);
-            var jsonPath = Path.Combine(Shoot.SavePath, "ReadJson.json");
-            File.WriteAllText(jsonPath, serObj);
-            _genJson = genJson;
-            return jsonPath;
         }
 
         public void LateUpdate()
@@ -198,52 +172,6 @@ namespace com.knight.thrid2dcapture
         public void OnDestroy()
         {
             _playable?.Dispose();
-        }
-
-        private void CreateAnimationClip()
-        {
-            var savePath = Shoot.SavePath;
-            savePath = savePath[savePath.IndexOf("Assets")..];
-#if UNITY_EDITOR
-            AssetDatabase.Refresh();
-            EditorApplication.isPlaying = false;
-#endif
-            foreach (var clip in _playableClips)
-            {
-                var subDires = Directory.GetDirectories(savePath, $"{name}_{clip.name}_*", SearchOption.TopDirectoryOnly);
-                foreach (var imagePath in subDires)
-                {
-                    var clipName = $"{Path.GetFileName(imagePath)}.anim";
-                    var clipPath = Path.Combine(imagePath, clipName);
-                    SpriteSetting.SetPathTextue2Sprite(imagePath);
-                    var isLoop = IsLoopingCheck(imagePath);
-                    AnimationMaker.CreateAndSaveClip(clipPath, imagePath, isLoop);
-                }
-            }
-
-#if UNITY_EDITOR
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-#endif
-        }
-
-        private bool IsLoopingCheck(string path)
-        {
-            var rePath = path.Replace('\\', '/').ToLower()[..path.LastIndexOf('_')];
-            foreach (var action in _genJson.ActionJsons)
-            {
-                if (action.RotateActions == null || action.RotateActions.Length == 0) continue;
-                if (!action.RotateActions[0].Path.Replace('\\', '/').ToLower().StartsWith(rePath)) continue;
-                var actionType = action.Type;
-
-                return actionType switch
-                {
-                    ActionType.Move or ActionType.Idle => true,
-                    _ => false,
-                };
-            }
-
-            throw new NotImplementedException($"No match with \"{rePath}\"");
         }
     }
 }

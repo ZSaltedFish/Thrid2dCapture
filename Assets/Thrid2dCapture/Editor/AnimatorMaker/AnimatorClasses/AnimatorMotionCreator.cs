@@ -8,24 +8,28 @@ namespace com.knight.thrid2dcapture
 {
     public class AnimatorMotionCreator
     {
-        private ActionMotions _idleMotion = new(ActionType.Idle);
-        private ActionMotions _moveMotion = new(ActionType.Move);
-        private ActionMotions _dieMotion = new(ActionType.Die);
-        private ActionMotions _hitMotion = new(ActionType.Hit);
+        private ActionMotions _idleMotion;
+        private ActionMotions _moveMotion;
+        private ActionMotions _dieMotion;
+        private ActionMotions _hitMotion;
         private List<ActionMotions> _attacksMotion = new();
 
         private AnimatorStateMachine _rootMachine;
 
-        public AnimatorMotionCreator(AnimatorController ctrl, string jsonPath)
+        public AnimatorMotionCreator(AnimatorController ctrl, GenJson json)
         {
-            var json = JsonConvert.DeserializeObject<GenJson>(File.ReadAllText(jsonPath));
-            _idleMotion.CreateStateWithoutTransition(ctrl, json);
-            _moveMotion.CreateStateWithoutTransition(ctrl, json);
-            _dieMotion.CreateStateWithoutTransition(ctrl, json);
-            _hitMotion.CreateStateWithoutTransition(ctrl, json);
+            _idleMotion = new ActionMotions(ActionType.Idle, json);
+            _moveMotion = new ActionMotions(ActionType.Move, json);
+            _dieMotion = new ActionMotions(ActionType.Die, json);
+            _hitMotion = new ActionMotions(ActionType.Hit, json);
 
-            var attackMotion = new ActionMotions(ActionType.Attack);
-            attackMotion.CreateState(ctrl, json);
+            _idleMotion.CreateStateWithoutTransition(ctrl);
+            _moveMotion.CreateStateWithoutTransition(ctrl);
+            _dieMotion.CreateStateWithoutTransition(ctrl);
+            _hitMotion.CreateStateWithoutTransition(ctrl);
+
+            var attackMotion = new ActionMotions(ActionType.Attack, json);
+            attackMotion.CreateState(ctrl);
             _attacksMotion.Add(attackMotion);
 
             for (var i = (int)ActionType.SpecialAttack; i < (int)ActionType.Skill3; ++i)
@@ -33,8 +37,8 @@ namespace com.knight.thrid2dcapture
                 var actionJson = json.ActionJsons.FirstOrDefault(t => t.Type == (ActionType)i);
                 if (actionJson == null) continue;
 
-                var motion = new ActionMotions((ActionType)i);
-                motion.CreateState(ctrl, json);
+                var motion = new ActionMotions((ActionType)i, json);
+                motion.CreateState(ctrl);
                 _attacksMotion.Add(motion);
             }
 
