@@ -53,6 +53,17 @@ namespace com.knight.thrid2dcapture
             AssetDatabase.Refresh();
         }
 
+        [MenuItem("Thrid2dCapture/Test/TextureArrayAssetCreateTest")]
+        public static void TextureArrayAssetCreateTest()
+        {
+            var jsonPath = "Assets/Res/Samurai_door/Samurai_door_json.json";
+            var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
+            var genJson = JsonConvert.DeserializeObject<GenJson>(jsonAsset.text);
+            var textureArrayGen = new TextureArrayGen(genJson);
+            textureArrayGen.GenAllAnimTextureArray();
+
+        }
+
         [MenuItem("Thrid2dCapture/Test/AnimationClipCreateTest")]
         public static void AnimationClipCreateTest()
         {

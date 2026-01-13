@@ -32,10 +32,10 @@ namespace com.knight.thrid2dcapture
         {
             var actionPath = Path.Combine(_srcPath, actionJson.AnimName);
 
-            SetTextureReadWriteEnable(actionPath);
+            //SetTextureReadWriteEnable(actionPath);
             var count = actionJson.FrameCount;
-            var baseColorArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.RGBA32, false);
-            var maskArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.R8, false);
+            var baseColorArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.DXT5, false);
+            var maskArray = new Texture2DArray(_srcJson.TextureWidth, _srcJson.TextureHeight, count * (_ROT_TYPES.Length -1), TextureFormat.DXT1, false);
             foreach (var rotateType in _ROT_TYPES)
             {
                 if (rotateType == RotateType.End) continue;
@@ -51,8 +51,8 @@ namespace com.knight.thrid2dcapture
                         throw new FileNotFoundException($"No Texture Found {baseColorName} or {maskName}");
                     }
 
-                    baseColorArray.SetPixels32(baseColorTex.GetPixels32(), i + ((int)rotateType * count));
-                    maskArray.SetPixels32(maskTex.GetPixels32(), i + ((int)rotateType * count));
+                    Graphics.CopyTexture(baseColorTex, 0, 0, baseColorArray, i + ((int)rotateType * count), 0);
+                    Graphics.CopyTexture(maskTex, 0, 0, maskArray, i + ((int)rotateType * count), 0);
                 }
             }
 
