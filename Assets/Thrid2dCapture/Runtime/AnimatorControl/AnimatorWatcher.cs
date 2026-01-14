@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Unity.Plastic.Newtonsoft.Json;
+﻿using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEditor.Animations;
 #endif
-using UnityEditor.Graphs;
 using UnityEngine;
 
 namespace com.knight.thrid2dcapture
