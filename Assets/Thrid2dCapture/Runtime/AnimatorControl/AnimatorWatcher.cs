@@ -111,36 +111,6 @@ namespace com.knight.thrid2dcapture
                 animatorGen.Generate();
                 AssetDatabase.Refresh();
 #endif
-                //CreateAnimationClip();
-
-#if UNITY_EDITOR
-                //var controller = new AnimatorController();
-                //var path = Path.Combine(Shoot.AssetRootPath, $"{name}.controller");
-                //AssetDatabase.CreateAsset(controller, path);
-                //controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
-
-                //var rootSM = new AnimatorStateMachine
-                //{
-                //    name = "Base Layer",
-                //    hideFlags = HideFlags.HideInHierarchy
-                //};
-                //AssetDatabase.AddObjectToAsset(rootSM, controller);
-
-                //var baseLayer = new AnimatorControllerLayer
-                //{
-                //    name = "Base Layer",
-                //    defaultWeight = 1.0f,
-                //    stateMachine = rootSM
-                //};
-                //controller.layers = new[] { baseLayer };
-                //var creator = new AnimatorMotionCreator(controller, jsonPath);
-                //creator.Execute();
-
-                //AssetDatabase.SaveAssets();
-                //AssetDatabase.ImportAsset(path);
-                //AssetDatabase.Refresh();
-
-#endif
             }
         }
 
