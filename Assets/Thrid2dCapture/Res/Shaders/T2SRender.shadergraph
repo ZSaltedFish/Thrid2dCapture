@@ -1406,7 +1406,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "TeamColor",
     "m_DefaultReferenceName": "_TeamColor",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_CustomColor",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
