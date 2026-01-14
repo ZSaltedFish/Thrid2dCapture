@@ -139,6 +139,8 @@ namespace com.knight.thrid2dcapture
                 _maskCamera.CopyFrom(MainCamera);
                 _maskCamera.cullingMask = MaskCameraLayer;
                 _maskCamera.enabled = false;
+                _maskCamera.clearFlags = CameraClearFlags.SolidColor;
+                _maskCamera.backgroundColor = Color.black;
             }
         }
         #region FOR_TESTING
