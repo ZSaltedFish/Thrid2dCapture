@@ -18,6 +18,7 @@ namespace com.knight.thrid2dcapture
 
         public AnimatorMotionCreator(AnimatorController ctrl, GenJson json)
         {
+            AnimatorRotate.TryCreateParam(ctrl);
             _idleMotion = new ActionMotions(ActionType.Idle, json);
             _moveMotion = new ActionMotions(ActionType.Move, json);
             _dieMotion = new ActionMotions(ActionType.Dead, json);
@@ -30,6 +31,7 @@ namespace com.knight.thrid2dcapture
 
             var attackMotion = new ActionMotions(ActionType.Attack, json);
             attackMotion.CreateState(ctrl);
+            attackMotion.AddMuliplerParam("AttackPlaybackSpeed");
             _attacksMotion.Add(attackMotion);
 
             for (var i = (int)ActionType.SpecialAttack; i < (int)ActionType.Skill3; ++i)
@@ -39,11 +41,11 @@ namespace com.knight.thrid2dcapture
 
                 var motion = new ActionMotions((ActionType)i, json);
                 motion.CreateState(ctrl);
+                motion.AddMuliplerParam($"AttackPlaybackSpeed");
                 _attacksMotion.Add(motion);
             }
 
             _rootMachine = ctrl.layers[0].stateMachine;
-            AnimatorRotate.TryCreateParam(ctrl);
         }
 
         public void Execute()

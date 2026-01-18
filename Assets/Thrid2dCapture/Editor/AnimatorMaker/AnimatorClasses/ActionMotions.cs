@@ -56,10 +56,10 @@ namespace com.knight.thrid2dcapture
 
                 var state = _actionState.AddState($"{clip.name}_state", GetPosition(rotateType));
                 state.motion = clip;
-                _rotate2State.Add(rotateType, state);
 
                 var transition = _actionState.AddEntryTransition(state);
                 transition.AddCondition(AnimatorConditionMode.Equals, i, ROTATE_NAME);
+                _rotate2State.Add(rotateType, state);
             }
         }
 
@@ -93,6 +93,15 @@ namespace com.knight.thrid2dcapture
                 var state = _actionState.AddState($"{clip.name}_state", GetPosition(rotateType));
                 state.motion = clip;
                 _rotate2State.Add(rotateType, state);
+            }
+        }
+
+        public void AddMuliplerParam(string paramName)
+        {
+            foreach (var state in _rotate2State.Values)
+            {
+                state.speedParameter = paramName;
+                state.speedParameterActive = true;
             }
         }
 

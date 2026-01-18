@@ -30,7 +30,7 @@ namespace com.knight.thrid2dcapture
             }
         }
 
-        [MenuItem("Tools/Test/AnimatorCreator")]
+        //[MenuItem("Tools/Test/AnimatorCreator")]
         public static void Init()
         {
             var window = GetWindow<AnimatorEntiryEditor>();

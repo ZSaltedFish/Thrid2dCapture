@@ -112,7 +112,13 @@ namespace com.knight.thrid2dcapture
                 controller.AddParameter(actionType.ToString(), paramType);
             }
 
-            controller.AddParameter("AttackPlaybackSpeed", AnimatorControllerParameterType.Float);
+            var ctrlParam = new AnimatorControllerParameter
+            {
+                name = "AttackPlaybackSpeed",
+                type = AnimatorControllerParameterType.Float,
+                defaultFloat = 1f
+            };
+            controller.AddParameter(ctrlParam);
         }
 
         private static AnimatorStateMachine CreateSubState(AnimatorController controller, ActionType action, string path, string charName, string animationName)
