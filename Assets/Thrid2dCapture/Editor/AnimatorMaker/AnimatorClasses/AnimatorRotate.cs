@@ -21,7 +21,7 @@ namespace com.knight.thrid2dcapture
             {ActionType.Skill2, AnimatorControllerParameterType.Trigger },
             {ActionType.Skill3, AnimatorControllerParameterType.Trigger },
             {ActionType.Move, AnimatorControllerParameterType.Bool },
-            {ActionType.Die, AnimatorControllerParameterType.Bool },
+            {ActionType.Dead, AnimatorControllerParameterType.Bool },
             {ActionType.Idle, AnimatorControllerParameterType.Bool },
         };
 

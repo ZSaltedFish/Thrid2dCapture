@@ -6,7 +6,7 @@
         Move,
         Attack,
         Hit,
-        Die,
+        Dead,
         SpecialAttack,
         Skill1,
         Skill2,

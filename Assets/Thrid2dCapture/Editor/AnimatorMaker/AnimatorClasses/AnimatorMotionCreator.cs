@@ -20,7 +20,7 @@ namespace com.knight.thrid2dcapture
         {
             _idleMotion = new ActionMotions(ActionType.Idle, json);
             _moveMotion = new ActionMotions(ActionType.Move, json);
-            _dieMotion = new ActionMotions(ActionType.Die, json);
+            _dieMotion = new ActionMotions(ActionType.Dead, json);
             _hitMotion = new ActionMotions(ActionType.Hit, json);
 
             _idleMotion.CreateState(ctrl);
@@ -158,7 +158,7 @@ namespace com.knight.thrid2dcapture
                 transition.exitTime = 0;
                 transition.duration = 0;
                 transition.hasFixedDuration = false;
-                transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Die.ToString());
+                transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Dead.ToString());
                 transition.AddCondition(AnimatorConditionMode.Equals, (int)rotate, ActionMotions.ROTATE_NAME);
             }
         }
