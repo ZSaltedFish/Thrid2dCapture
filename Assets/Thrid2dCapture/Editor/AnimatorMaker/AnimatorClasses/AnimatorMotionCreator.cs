@@ -23,8 +23,8 @@ namespace com.knight.thrid2dcapture
             _dieMotion = new ActionMotions(ActionType.Die, json);
             _hitMotion = new ActionMotions(ActionType.Hit, json);
 
-            _idleMotion.CreateStateWithoutTransition(ctrl);
-            _moveMotion.CreateStateWithoutTransition(ctrl);
+            _idleMotion.CreateState(ctrl);
+            _moveMotion.CreateState(ctrl);
             _dieMotion.CreateStateWithoutTransition(ctrl);
             _hitMotion.CreateStateWithoutTransition(ctrl);
 
@@ -92,6 +92,7 @@ namespace com.knight.thrid2dcapture
                     transition.exitTime = 0;
                     transition.duration = 0;
                     transition.hasFixedDuration = false;
+                    transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Idle.ToString());
                 }
             }
         }
@@ -134,6 +135,7 @@ namespace com.knight.thrid2dcapture
                     transition.exitTime = 0;
                     transition.duration = 0;
                     transition.hasFixedDuration = false;
+                    transition.AddCondition(AnimatorConditionMode.If, 1, ActionType.Move.ToString());
                 }
             }
         }
