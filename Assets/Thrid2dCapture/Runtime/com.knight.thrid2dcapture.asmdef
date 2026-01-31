@@ -2,9 +2,7 @@
     "name": "com.knight.thrid2dcapture",
     "rootNamespace": "com.knight.thrid2dcapture",
     "references": [],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

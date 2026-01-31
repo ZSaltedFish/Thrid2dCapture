@@ -11,6 +11,9 @@ namespace com.knight.thrid2dcapture
     [RequireComponent(typeof(CameraControl))]
     public class AnimatorWatcher : MonoBehaviour
     {
+        public const string GEN_KEY = "Gen_key";
+        public const string JSON_PATH_NAME_KEY = "JSON_PATH_NAME_KEY";
+
         public ActionType[] ActType;
         public AnimationClip[] Clips;
         public ScreenShoot Shoot;
@@ -91,19 +94,14 @@ namespace com.knight.thrid2dcapture
                 Debug.Log("AnimatorWatcher Finish Capture, To create AnimationClip");
 #if UNITY_EDITOR
                 var jsonObj = new JsonGen(_playableClips, _playableActionTypes, Shoot.AssetRootPath, name, _cameraControl.Width, _cameraControl.Height, 30);
-                var jsonPath = jsonObj.GenerateJson();
+                _ = jsonObj.GenerateJson();
                 EditorApplication.isPlaying = false;
                 AssetDatabase.Refresh();
 
-                var textureGen = new TextureArrayGen(jsonPath);
-                textureGen.GenAllAnimTextureArray();
+                PlayerPrefs.SetInt(GEN_KEY, 1);
+                PlayerPrefs.SetString(JSON_PATH_NAME_KEY, jsonObj.JsonPath);
+                PlayerPrefs.Save();
 
-                var clipGen = new AnimationClipGen(jsonPath);
-                clipGen.Generate();
-
-                var animatorGen = new AnimatorGen(jsonPath);
-                animatorGen.Generate();
-                AssetDatabase.Refresh();
 #endif
             }
         }

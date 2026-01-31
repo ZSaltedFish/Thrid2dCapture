@@ -9,6 +9,7 @@ namespace com.knight.thrid2dcapture
 {
     public class JsonGen
     {
+        public string JsonPath;
         private string _basePath;
         private string _charName;
         private int _texWidth;
@@ -31,6 +32,7 @@ namespace com.knight.thrid2dcapture
         {
             var json = GetJson();
             var jsonPath = Path.Combine(_basePath, _charName, $"{_charName}_json.json");
+            JsonPath = jsonPath;
             var serObj = JsonConvert.SerializeObject(json);
             File.WriteAllText(jsonPath, serObj);
             return json;
