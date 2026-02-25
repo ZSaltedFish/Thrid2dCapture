@@ -28,21 +28,24 @@ namespace com.knight.thrid2dcapture
         private void DrawActionClips()
         {
             CheckAndSetList();
-            var actTypeField = serializedObject.FindProperty(nameof(AnimatorWatcher.ActType));
-            var animationClipField = serializedObject.FindProperty(nameof(AnimatorWatcher.Clips));
+            var aniamtionInfoField = serializedObject.FindProperty(nameof(AnimatorWatcher.AnimationInfos));
 
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 var index = 0;
                 foreach (var action in ACTION_TYPES)
                 {
-                    var actTypeF = actTypeField.GetArrayElementAtIndex(index);
-                    var clipTypeF = animationClipField.GetArrayElementAtIndex(index);
-                    
+                    var infoF = aniamtionInfoField.GetArrayElementAtIndex(index);
+                    if (infoF == null) continue;
+                    var actTypeF = infoF.FindPropertyRelative(nameof(AnimatorWatcher.AnimationInfo.ActType));
+                    var clipTypeF = infoF.FindPropertyRelative(nameof(AnimatorWatcher.AnimationInfo.Clip));
+                    var enableF = infoF.FindPropertyRelative(nameof(AnimatorWatcher.AnimationInfo.Enable));
+
                     using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
                     {
                         actTypeF.enumValueIndex = index;
                         EditorGUILayout.PropertyField(clipTypeF, new GUIContent(action.ToString()));
+                        EditorGUILayout.PropertyField(enableF, new GUIContent(), GUILayout.Width(15f));
                         ++index;
                     }
 
@@ -52,15 +55,13 @@ namespace com.knight.thrid2dcapture
 
         private void CheckAndSetList()
         {
-            var actTypeField = serializedObject.FindProperty(nameof(AnimatorWatcher.ActType));
-            var animationClipField = serializedObject.FindProperty(nameof(AnimatorWatcher.Clips));
+            var aniamtionInfoField = serializedObject.FindProperty(nameof(AnimatorWatcher.AnimationInfos));
 
-            if (actTypeField.arraySize == ACTION_COUNT) return;
+            if (aniamtionInfoField.arraySize == ACTION_COUNT) return;
 
-            while (actTypeField.arraySize < ACTION_COUNT)
+            while (aniamtionInfoField.arraySize < ACTION_COUNT)
             {
-                actTypeField.InsertArrayElementAtIndex(actTypeField.arraySize);
-                animationClipField.InsertArrayElementAtIndex(animationClipField.arraySize);
+                aniamtionInfoField.InsertArrayElementAtIndex(aniamtionInfoField.arraySize);
             }
         }
         #endregion

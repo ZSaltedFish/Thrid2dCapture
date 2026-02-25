@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,11 +12,17 @@ namespace com.knight.thrid2dcapture
     [RequireComponent(typeof(CameraControl))]
     public class AnimatorWatcher : MonoBehaviour
     {
+        [Serializable]
+        public class AnimationInfo
+        {
+            public AnimationClip Clip;
+            public ActionType ActType;
+            public bool Enable;
+        }
         public const string GEN_KEY = "Gen_key";
         public const string JSON_PATH_NAME_KEY = "JSON_PATH_NAME_KEY";
 
-        public ActionType[] ActType;
-        public AnimationClip[] Clips;
+        public AnimationInfo[] AnimationInfos;
         public ScreenShoot Shoot;
         public bool NoOutputModel;
 
@@ -32,7 +39,7 @@ namespace com.knight.thrid2dcapture
 
         public void Start()
         {
-            if (Clips.Length == 0) return;
+            if (AnimationInfos.Length == 0) return;
             _cameraControl = GetComponent<CameraControl>();
             Shoot = GetComponent<ScreenShoot>();
             _playable = new PlayableController(GetComponent<Animator>());
@@ -41,11 +48,12 @@ namespace com.knight.thrid2dcapture
             Shoot.Size = new Vector2(_cameraControl.Width, _cameraControl.Height);
             var actTypes = new List<ActionType>();
             var animations = new List<AnimationClip>();
-            for (var i = 0; i < Clips.Length; ++i)
+            for (var i = 0; i < AnimationInfos.Length; ++i)
             {
-                if (!Clips[i]) continue;
-                animations.Add(Clips[i]);
-                actTypes.Add(ActType[i]);
+                if (!AnimationInfos[i].Clip) continue;
+                if (!AnimationInfos[i].Enable) continue;
+                animations.Add(AnimationInfos[i].Clip);
+                actTypes.Add(AnimationInfos[i].ActType);
             }
 
             _playableClips = animations.ToArray();
