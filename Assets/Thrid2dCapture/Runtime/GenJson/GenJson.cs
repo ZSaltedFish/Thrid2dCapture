@@ -22,5 +22,6 @@ namespace com.knight.thrid2dcapture
         public ActionJson[] ActionJsons;
         public string ControllerPath;
         public int Rate;
+        public bool ExtensionGen;
     }
 }

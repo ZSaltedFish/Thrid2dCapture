@@ -29,5 +29,14 @@ namespace com.knight.thrid2dcapture
 
             watcher.StartCatch();
         }
+
+        private void ExtensionCatch()
+        {
+            var cameraControl = (CameraControl)target;
+            if (!cameraControl) { Debug.LogError("Target is null"); return; }
+            if (!cameraControl.TryGetComponent<AnimatorWatcher>(out var watcher)) { Debug.LogError("没有AnimatorWatcher"); return; }
+
+            watcher.ExtensionCatch();
+        }
     }
 }

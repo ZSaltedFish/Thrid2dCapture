@@ -10,6 +10,7 @@ namespace com.knight.thrid2dcapture
     public class JsonGen
     {
         public string JsonPath;
+        public bool ExtensionGen;
         private string _basePath;
         private string _charName;
         private int _texWidth;
@@ -49,6 +50,7 @@ namespace com.knight.thrid2dcapture
                 ActionJsons = new ActionJson[_actTypes.Length],
                 ControllerPath = Path.Combine(_basePath, _charName, $"{_charName}_Controller.controller").Replace('\\', '/'),
                 Rate = _rate,
+                ExtensionGen = ExtensionGen
             };
             
             var rotateTypes = (Enum.GetValues(typeof(RotateType)) as RotateType[]).ToList();

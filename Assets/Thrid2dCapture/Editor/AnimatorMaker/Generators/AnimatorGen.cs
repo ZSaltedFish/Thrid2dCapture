@@ -14,9 +14,13 @@ namespace com.knight.thrid2dcapture
 
         public void Generate()
         {
-            var ctrl = new AnimatorController();
+            AnimatorController ctrl;
             var path = _genJson.ControllerPath;
-            AssetDatabase.CreateAsset(ctrl, path);
+            if (_genJson.ExtensionGen)
+            {
+                ctrl = new AnimatorController();
+                AssetDatabase.CreateAsset(ctrl, path);
+            }
             ctrl = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
 
             var rootSM = new AnimatorStateMachine

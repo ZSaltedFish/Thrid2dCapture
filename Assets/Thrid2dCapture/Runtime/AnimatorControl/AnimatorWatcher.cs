@@ -33,6 +33,7 @@ namespace com.knight.thrid2dcapture
         private bool _isFinished;
         private bool _start = false;
         private bool _hasOutput = false;
+        private bool _extensionGen = false;
 
         private ActionType[] _playableActionTypes;
         private AnimationClip[] _playableClips;
@@ -66,6 +67,13 @@ namespace com.knight.thrid2dcapture
 
         public void StartCatch()
         {
+            _start = true;
+            _extensionGen = false;
+        }
+
+        public void ExtensionCatch()
+        {
+            _extensionGen = true;
             _start = true;
         }
 
@@ -102,6 +110,7 @@ namespace com.knight.thrid2dcapture
                 Debug.Log("AnimatorWatcher Finish Capture, To create AnimationClip");
 #if UNITY_EDITOR
                 var jsonObj = new JsonGen(_playableClips, _playableActionTypes, Shoot.AssetRootPath, name, _cameraControl.Width, _cameraControl.Height, 30);
+                jsonObj.ExtensionGen = _extensionGen;
                 _ = jsonObj.GenerateJson();
                 EditorApplication.isPlaying = false;
                 AssetDatabase.Refresh();
