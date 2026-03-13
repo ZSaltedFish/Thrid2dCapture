@@ -16,7 +16,7 @@ namespace com.knight.thrid2dcapture
         {
             AnimatorController ctrl;
             var path = _genJson.ControllerPath;
-            if (_genJson.ExtensionGen)
+            if (!_genJson.ExtensionGen)
             {
                 ctrl = new AnimatorController();
                 AssetDatabase.CreateAsset(ctrl, path);

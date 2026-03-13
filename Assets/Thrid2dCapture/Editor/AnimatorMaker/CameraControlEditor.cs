@@ -17,7 +17,7 @@ namespace com.knight.thrid2dcapture
             EditorGUILayout.Space(30f);
             if (GUILayout.Button("Extesion Start"))
             {
-
+                ExtensionCatch();
             }
         }
 
