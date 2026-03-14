@@ -14,7 +14,7 @@ namespace com.knight.thrid2dcapture
 
         private AnimatorStateMachine _rootMachine;
 
-        public AnimatorMotionCreator(AnimatorController ctrl, GenJson json)
+        public AnimatorMotionCreator(AnimatorController ctrl, GenJson json, AnimatorStateMachine machine)
         {
             if (!json.ExtensionGen)
             {
@@ -24,13 +24,13 @@ namespace com.knight.thrid2dcapture
                 _dieMotion = new ActionMotions(ActionType.Dead, json);
                 _hitMotion = new ActionMotions(ActionType.Hit, json);
 
-                _idleMotion.CreateState(ctrl);
-                _moveMotion.CreateState(ctrl);
-                _dieMotion.CreateStateWithoutTransition(ctrl);
-                _hitMotion.CreateStateWithoutTransition(ctrl);
+                _idleMotion.CreateState(machine);
+                _moveMotion.CreateState(machine);
+                _dieMotion.CreateStateWithoutTransition(machine);
+                _hitMotion.CreateStateWithoutTransition(machine);
 
                 var attackMotion = new ActionMotions(ActionType.Attack, json);
-                attackMotion.CreateState(ctrl);
+                attackMotion.CreateState(machine);
                 attackMotion.AddMuliplerParam("AttackPlaybackSpeed");
                 _attacksMotion.Add(attackMotion);
             }
@@ -41,7 +41,7 @@ namespace com.knight.thrid2dcapture
                 if (actionJson == null) continue;
 
                 var motion = new ActionMotions((ActionType)i, json);
-                motion.CreateState(ctrl);
+                motion.CreateState(machine);
                 motion.AddMuliplerParam($"AttackPlaybackSpeed");
                 _attacksMotion.Add(motion);
             }

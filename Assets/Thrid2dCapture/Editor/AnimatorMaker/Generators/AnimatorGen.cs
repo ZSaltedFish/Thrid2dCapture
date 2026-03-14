@@ -23,11 +23,12 @@ namespace com.knight.thrid2dcapture
             }
             ctrl = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
 
+            AnimatorStateMachine rootSM;
             if (!_genJson.ExtensionGen)
             {
-                var rootSM = new AnimatorStateMachine
+                rootSM = new AnimatorStateMachine
                 {
-                    name = "Base Layer",
+                    name = "Base Layer"
                 };
 
                 AssetDatabase.AddObjectToAsset(rootSM, ctrl);
@@ -41,14 +42,17 @@ namespace com.knight.thrid2dcapture
 
                 ctrl.layers = new[] { baseLayer };
             }
-            var creator = new AnimatorMotionCreator(ctrl, _genJson);
+            else
+            {
+                rootSM = AssetDatabase.LoadAssetAtPath<AnimatorStateMachine>(path);
+            }
+            var creator = new AnimatorMotionCreator(ctrl, _genJson, rootSM);
             if (!_genJson.ExtensionGen) 
             {
                 creator.Execute();
             }
             else
             {
-                var rootSM = ctrl.layers[0].stateMachine;
                 EditorUtility.SetDirty(rootSM);
                 EditorUtility.SetDirty(ctrl);
                 AssetDatabase.SaveAssets();

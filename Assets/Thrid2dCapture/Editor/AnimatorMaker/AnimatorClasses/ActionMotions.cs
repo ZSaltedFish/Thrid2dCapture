@@ -27,10 +27,8 @@ namespace com.knight.thrid2dcapture
             _maskPath = _actJson.MaskTextureArrayPath;
         }
 
-        public void CreateState(AnimatorController controller)
+        public void CreateState(AnimatorStateMachine mainMachine)
         {
-            var mainMachine = controller.layers[0].stateMachine;
-
             var x = (int)ActionType * 100f;
             var y = (int)ActionType * 100f;
             _actionState = mainMachine.AddStateMachine(ActionType.ToString(), new Vector3(x, y, 0));
@@ -63,10 +61,8 @@ namespace com.knight.thrid2dcapture
             }
         }
 
-        public void CreateStateWithoutTransition(AnimatorController controller)
+        public void CreateStateWithoutTransition(AnimatorStateMachine mainMachine)
         {
-            var mainMachine = controller.layers[0].stateMachine;
-
             var x = (int)ActionType * 100f;
             var y = (int)ActionType * 100f;
             _actionState = mainMachine.AddStateMachine(ActionType.ToString(), new Vector3(x, y, 0));
