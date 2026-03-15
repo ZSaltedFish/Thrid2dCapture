@@ -250,5 +250,21 @@ namespace com.knight.thrid2dcapture
             }
         }
         #endregion
+        
+        #region AdditionalExecute
+        public void AdditionalExecute()
+        {
+            foreach (var action in _attacksMotion)
+            {
+                for (var i = 0; i < (int)RotateType.End; ++i)
+                {
+                    var rotate = (RotateType)i;
+                    var state = action[rotate];
+
+                    _ = state.AddExitTransition(true);
+                }
+            }
+        }
+        #endregion
     }
 }

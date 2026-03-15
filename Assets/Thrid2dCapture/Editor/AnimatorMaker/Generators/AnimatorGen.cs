@@ -53,6 +53,7 @@ namespace com.knight.thrid2dcapture
             }
             else
             {
+                creator.AdditionalExecute();
                 EditorUtility.SetDirty(rootSM);
                 EditorUtility.SetDirty(ctrl);
                 AssetDatabase.SaveAssets();
