@@ -20,7 +20,7 @@ namespace com.knight.thrid2dcapture
         public void GenAllAnimTextureArray()
         {
             var json = _srcJson;
-            foreach (var actionJson in json.ActionJsons)
+            foreach (var actionJson in json.SingleActionJsons)
             {
                 GenSimgleAnimTextureArray(actionJson);
             }
@@ -28,7 +28,7 @@ namespace com.knight.thrid2dcapture
             AssetDatabase.Refresh();
         }
 
-        private void GenSimgleAnimTextureArray(ActionJson actionJson)
+        private void GenSimgleAnimTextureArray(SingleActionJson actionJson)
         {
             var actionPath = Path.Combine(_srcPath, actionJson.AnimName);
 

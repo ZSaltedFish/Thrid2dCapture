@@ -28,6 +28,11 @@ void UnpackAlpha_float(float AlphaIn, out float AlphaBit, out float ExtraData)
     ExtraData = float((val >> 1) & 0x7FU) / 127.0f;
 }
 
+void CalculateArrayIndex_float(float animIndex, float animCount, float key, out float arrayIndex)
+{
+    arrayIndex = animIndex * animCount + key;
+}
+
 void AlphaSwitch_float(float3 colorRGB, float3 alpha, out float3 outColor)
 {
 #if _MASKSWITCH

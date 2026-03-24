@@ -27,7 +27,7 @@ namespace com.knight.thrid2dcapture
             var textureGen = new TextureArrayGen(genJson);
             textureGen.GenAllAnimTextureArray();
 
-            var clipGen = new AnimationClipGen(genJson);
+            var clipGen = new AnimtionSingleClipGen(genJson);
             clipGen.Generate();
 
             var animatorGen = new AnimatorGen(genJson);
