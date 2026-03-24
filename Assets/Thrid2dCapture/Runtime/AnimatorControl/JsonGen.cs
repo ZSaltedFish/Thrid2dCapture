@@ -47,7 +47,8 @@ namespace com.knight.thrid2dcapture
                 CharName = _charName,
                 TextureWidth = _texWidth,
                 TextureHeight = _texHeight,
-                ActionJsons = new ActionJson[_actTypes.Length],
+                //ActionJsons = new ActionJson[_actTypes.Length],
+                SingleActionJsons = new SingleActionJson[_actTypes.Length],
                 ControllerPath = Path.Combine(_basePath, _charName, $"{_charName}_Controller.controller").Replace('\\', '/'),
                 Rate = _rate,
                 ExtensionGen = ExtensionGen
@@ -61,24 +62,42 @@ namespace com.knight.thrid2dcapture
                 var clip = _clips[i];
 
                 if (!clip) continue;
-                var actionJson = new ActionJson
+                var singleActionJson = new SingleActionJson
                 {
                     Type = actType,
                     AnimName = clip.name,
                     FrameCount = Mathf.RoundToInt(clip.length * clip.frameRate),
                     BaseColorTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_BaseColorArray.asset").Replace('\\', '/'),
-                    MaskTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_MaskArray.asset").Replace('\\', '/')
+                    MaskTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_MaskArray.asset").Replace('\\', '/'),
+                    AnimationClipPath = Path.Combine(_basePath, _charName, $"{clip.name}.anim").Replace('\\', '/'),
                 };
 
-                var clipPaths = new List<string>();
-                foreach (var rotateType in rotateTypes)
-                {
-                    var path = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_{rotateType}.anim").Replace('\\', '/');
-                    clipPaths.Add(path);
-                }
-                actionJson.AnimationClipPaths = clipPaths.ToArray();
-                genJson.ActionJsons[i] = actionJson;
+                genJson.SingleActionJsons[i] = singleActionJson;
             }
+            //for (var i = 0; i < _clips.Length; ++i)
+            //{
+            //    var actType = _actTypes[i];
+            //    var clip = _clips[i];
+
+            //    if (!clip) continue;
+            //    var actionJson = new ActionJson
+            //    {
+            //        Type = actType,
+            //        AnimName = clip.name,
+            //        FrameCount = Mathf.RoundToInt(clip.length * clip.frameRate),
+            //        BaseColorTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_BaseColorArray.asset").Replace('\\', '/'),
+            //        MaskTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_MaskArray.asset").Replace('\\', '/')
+            //    };
+
+            //    var clipPaths = new List<string>();
+            //    foreach (var rotateType in rotateTypes)
+            //    {
+            //        var path = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_{rotateType}.anim").Replace('\\', '/');
+            //        clipPaths.Add(path);
+            //    }
+            //    actionJson.AnimationClipPaths = clipPaths.ToArray();
+            //    genJson.ActionJsons[i] = actionJson;
+            //}
 
             return genJson;
         }

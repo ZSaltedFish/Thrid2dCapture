@@ -46,14 +46,10 @@ namespace com.knight.thrid2dcapture
             {
                 rootSM = AssetDatabase.LoadAssetAtPath<AnimatorStateMachine>(path);
             }
-            var creator = new AnimatorMotionCreator(ctrl, _genJson, rootSM);
-            if (!_genJson.ExtensionGen) 
+            var creator = new SingleAnimatorMotionCreator(ctrl, _genJson);
+            creator.Execute(rootSM);
+            if (_genJson.ExtensionGen)
             {
-                creator.Execute();
-            }
-            else
-            {
-                creator.AdditionalExecute();
                 EditorUtility.SetDirty(rootSM);
                 EditorUtility.SetDirty(ctrl);
                 AssetDatabase.SaveAssets();
