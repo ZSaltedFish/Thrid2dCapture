@@ -48,6 +48,11 @@ namespace com.knight.thrid2dcapture
             }
             var creator = new SingleAnimatorMotionCreator(ctrl, _genJson);
             creator.Execute(rootSM);
+            if (!_genJson.ExtensionGen)
+            {
+                creator.AutoConnect(rootSM);
+            }
+
             if (_genJson.ExtensionGen)
             {
                 EditorUtility.SetDirty(rootSM);

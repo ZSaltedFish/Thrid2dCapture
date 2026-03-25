@@ -36,25 +36,22 @@ namespace com.knight.thrid2dcapture
         private void DeleteTmp(GenJson json)
         {
             var deleteFileResults = new List<string>();
-            foreach (var actJson in json.ActionJsons)
+            foreach (var actJson in json.SingleActionJsons)
             {
-                foreach (var path in actJson.AnimationClipPaths)
+                var path = Path.GetDirectoryName(actJson.AnimationClipPath);
+                var guids = AssetDatabase.FindAssets("t:Texture2D", new string[] { path });
+                var deleteList = new string[guids.Length];
+                for (var i = 0; i < deleteList.Length; ++i)
                 {
-                    var dire = Path.GetDirectoryName(path);
-                    var guids = AssetDatabase.FindAssets("t:Texture2D", new string[] { dire });
-                    var deleteList = new string[guids.Length];
-                    for (var i = 0; i < deleteList.Length; ++i)
-                    {
-                        var guid = guids[i];
-                        var deleteFileName = AssetDatabase.GUIDToAssetPath(guid);
-                        deleteList[i] = deleteFileName;
-                    }
-                    var deleteResults = new List<string>();
-                    var result = AssetDatabase.DeleteAssets(deleteList, deleteResults);
-                    if (result)
-                    {
-                        deleteFileResults.AddRange(deleteResults);
-                    }
+                    var guid = guids[i];
+                    var deleteFileName = AssetDatabase.GUIDToAssetPath(guid);
+                    deleteList[i] = deleteFileName;
+                }
+                var deleteResults = new List<string>();
+                var result = AssetDatabase.DeleteAssets(deleteList, deleteResults);
+                if (result)
+                {
+                    deleteFileResults.AddRange(deleteResults);
                 }
             }
 
