@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Linq;
 using System;
 using System.IO;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace com.knight.thrid2dcapture
@@ -11,6 +10,7 @@ namespace com.knight.thrid2dcapture
     {
         public string JsonPath;
         public bool ExtensionGen;
+        public string CustomGenClassName;
         private string _basePath;
         private string _charName;
         private int _texWidth;
@@ -51,7 +51,8 @@ namespace com.knight.thrid2dcapture
                 SingleActionJsons = new SingleActionJson[_actTypes.Length],
                 ControllerPath = Path.Combine(_basePath, _charName, $"{_charName}_Controller.controller").Replace('\\', '/'),
                 Rate = _rate,
-                ExtensionGen = ExtensionGen
+                ExtensionGen = ExtensionGen,
+                CustomGenClassName = CustomGenClassName,
             };
             
             var rotateTypes = (Enum.GetValues(typeof(RotateType)) as RotateType[]).ToList();
@@ -74,30 +75,6 @@ namespace com.knight.thrid2dcapture
 
                 genJson.SingleActionJsons[i] = singleActionJson;
             }
-            //for (var i = 0; i < _clips.Length; ++i)
-            //{
-            //    var actType = _actTypes[i];
-            //    var clip = _clips[i];
-
-            //    if (!clip) continue;
-            //    var actionJson = new ActionJson
-            //    {
-            //        Type = actType,
-            //        AnimName = clip.name,
-            //        FrameCount = Mathf.RoundToInt(clip.length * clip.frameRate),
-            //        BaseColorTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_BaseColorArray.asset").Replace('\\', '/'),
-            //        MaskTextureArrayPath = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_MaskArray.asset").Replace('\\', '/')
-            //    };
-
-            //    var clipPaths = new List<string>();
-            //    foreach (var rotateType in rotateTypes)
-            //    {
-            //        var path = Path.Combine(_basePath, _charName, clip.name, $"{_charName}_{actType}_{rotateType}.anim").Replace('\\', '/');
-            //        clipPaths.Add(path);
-            //    }
-            //    actionJson.AnimationClipPaths = clipPaths.ToArray();
-            //    genJson.ActionJsons[i] = actionJson;
-            //}
 
             return genJson;
         }

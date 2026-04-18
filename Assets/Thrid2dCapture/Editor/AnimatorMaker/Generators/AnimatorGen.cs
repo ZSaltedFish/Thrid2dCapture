@@ -1,15 +1,16 @@
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEngine;
 
 namespace com.knight.thrid2dcapture
 {
     public class AnimatorGen
     {
         private readonly GenJson _genJson;
-        public AnimatorGen(GenJson json)
+        private CustomGen _customGen;
+        public AnimatorGen(GenJson json, CustomGen customGen)
         {
             _genJson = json;
+            _customGen = customGen;
         }
 
         public void Generate()
@@ -48,6 +49,9 @@ namespace com.knight.thrid2dcapture
             }
             var creator = new SingleAnimatorMotionCreator(ctrl, _genJson);
             creator.Execute(rootSM);
+
+            _customGen?.RunAnimatorGen(creator, rootSM, ctrl);
+            
             if (!_genJson.ExtensionGen)
             {
                 creator.AutoConnect(rootSM);

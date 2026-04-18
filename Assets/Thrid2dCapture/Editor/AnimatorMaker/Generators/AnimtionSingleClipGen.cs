@@ -6,10 +6,12 @@ namespace com.knight.thrid2dcapture
     public class AnimtionSingleClipGen
     {
         private readonly GenJson _genJson;
+        private readonly CustomGen _customGen;
 
-        public AnimtionSingleClipGen(GenJson json)
+        public AnimtionSingleClipGen(GenJson json, CustomGen gen)
         {
             _genJson = json;
+            _customGen = gen;
         }
 
         public void Generate()

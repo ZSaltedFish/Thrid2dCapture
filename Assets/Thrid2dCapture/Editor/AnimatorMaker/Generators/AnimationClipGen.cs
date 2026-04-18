@@ -1,11 +1,11 @@
 using System;
 using System.IO;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace com.knight.thrid2dcapture
 {
+    [Obsolete("Nolonger used, replaced by AnimationSingleClipGen")]
     public class AnimationClipGen
     {
         private readonly GenJson _genJson;

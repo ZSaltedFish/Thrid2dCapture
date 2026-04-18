@@ -17,6 +17,13 @@ namespace com.knight.thrid2dcapture
                 serializedObject.Update();
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(AnimatorWatcher.NoOutputModel)));
                 DrawActionClips();
+
+                using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+                {
+                    var customGenPathField = serializedObject.FindProperty(nameof(AnimatorWatcher.CustomGenClassName));
+                    EditorGUILayout.PropertyField(customGenPathField);
+                }
+
                 if (changed.changed)
                 {
                     serializedObject.ApplyModifiedProperties();

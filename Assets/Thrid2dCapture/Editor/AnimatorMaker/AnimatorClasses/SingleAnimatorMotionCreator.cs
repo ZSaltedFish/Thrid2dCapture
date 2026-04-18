@@ -11,6 +11,8 @@ namespace com.knight.thrid2dcapture
 {
     public class SingleAnimatorMotionCreator
     {
+        public Dictionary<ActionType, AnimatorState> StateDict => _stateDict;
+
         private GenJson _json;
         private Dictionary<ActionType, AnimatorState> _stateDict = new();
         private ActionType[] _attackTypes = { ActionType.Attack, ActionType.SpecialAttack, ActionType.Skill1, ActionType.Skill2, ActionType.Skill3 };

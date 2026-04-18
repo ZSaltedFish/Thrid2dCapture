@@ -36,5 +36,6 @@ namespace com.knight.thrid2dcapture
         public string ControllerPath;
         public int Rate;
         public bool ExtensionGen;
+        public string CustomGenClassName;
     }
 }

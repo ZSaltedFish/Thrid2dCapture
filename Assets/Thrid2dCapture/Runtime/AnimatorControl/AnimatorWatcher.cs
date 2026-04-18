@@ -25,6 +25,7 @@ namespace com.knight.thrid2dcapture
         public AnimationInfo[] AnimationInfos;
         public ScreenShoot Shoot;
         public bool NoOutputModel;
+        public string CustomGenClassName;
 
         private PlayableController _playable;
         private RotateController _rotate;
@@ -111,7 +112,8 @@ namespace com.knight.thrid2dcapture
 #if UNITY_EDITOR
                 var jsonObj = new JsonGen(_playableClips, _playableActionTypes, Shoot.AssetRootPath, name, _cameraControl.Width, _cameraControl.Height, 30)
                 {
-                    ExtensionGen = _extensionGen
+                    ExtensionGen = _extensionGen,
+                    CustomGenClassName = CustomGenClassName
                 };
                 _ = jsonObj.GenerateJson();
                 EditorApplication.isPlaying = false;

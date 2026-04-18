@@ -59,7 +59,7 @@ namespace com.knight.thrid2dcapture
             var jsonPath = "Assets/Res/Samurai_door/Samurai_door_json.json";
             var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
             var genJson = JsonConvert.DeserializeObject<GenJson>(jsonAsset.text);
-            var textureArrayGen = new TextureArrayGen(genJson);
+            var textureArrayGen = new TextureArrayGen(genJson, null);
             textureArrayGen.GenAllAnimTextureArray();
 
         }
@@ -81,7 +81,7 @@ namespace com.knight.thrid2dcapture
             var jsonPath = "Assets/Res/Samurai_door/Samurai_door_json.json";
             var jsonAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
             var genJson = JsonConvert.DeserializeObject<GenJson>(jsonAsset.text);
-            var animatorGen = new AnimatorGen(genJson);
+            var animatorGen = new AnimatorGen(genJson, null);
             animatorGen.Generate();
 
             AssetDatabase.Refresh();

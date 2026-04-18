@@ -10,11 +10,13 @@ namespace com.knight.thrid2dcapture
         private string _charName;
         private string _srcPath;
         private GenJson _srcJson;
-        public TextureArrayGen(GenJson json)
+        private CustomGen _cutomGen;
+        public TextureArrayGen(GenJson json, CustomGen gen)
         {
             _charName = json.CharName;
             _srcPath = Path.Combine(json.BasePath, json.CharName);
             _srcJson = json;
+            _cutomGen = gen;
         }
 
         public void GenAllAnimTextureArray()
