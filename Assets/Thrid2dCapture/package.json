@@ -1,14 +1,17 @@
 {
-    "name": "com.zknight.thrid2dcapture",
-    "displayName": "Thrid2dCapture",
-    "version": "1.2.1",
-    "description": "A Unity package to create 2d piture by 3d mode.",
-    "author": {
-      "name": "ZKnight"
-    },
-    "keywords": [
-      "unity"
-    ],
-    "hideInEditor": false
-  }
-  
+  "name": "com.zknight.thrid2dcapture",
+  "displayName": "Thrid2dCapture",
+  "version": "1.2.1",
+  "description": "A high-performance 3D-to-2D sprite capture tool supporting 16-direction rendering, TextureArray indexing, and customizable AnimatorController generation.",
+  "author": {
+    "name": "ZKnight"
+  },
+  "keywords": [
+    "unity",
+    "3d-to-2d",
+    "texture-array",
+    "sprite-renderer",
+    "animator-generator"
+  ],
+  "hideInEditor": false
+}
